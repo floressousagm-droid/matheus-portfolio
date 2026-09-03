@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+/*
+ * Sistema de tokens do portfólio.
+ * Tema fixo: dark, data-driven, editorial. Azul como acento (não como
+ * preenchimento). Ver PORTFOLIO_CONTEUDO.md / design brief para a lógica.
+ */
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  /* Superfícies — do quase-preto a cinzas de profundidade crescente */
+  --color-surface-0: #05060a;
+  --color-surface-1: #0a0c12;
+  --color-surface-2: #10131b;
+  --color-surface-3: #171b26;
+  --color-surface-border: #232838;
+
+  /* Texto */
+  --color-ink-0: #f5f6f8;
+  --color-ink-1: #c7cbd6;
+  --color-ink-2: #8a90a1;
+  --color-ink-3: #5b6072;
+
+  /* Acento azul — tecnologia, dados, sistemas */
+  --color-accent-100: #dbe9ff;
+  --color-accent-300: #7aa8ff;
+  --color-accent-500: #3d7dff;
+  --color-accent-600: #2a63e0;
+  --color-accent-glow: #3d7dff33;
+
+  --radius-card: 1rem;
+}
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  /* O header é `fixed`; sem isso o topo de cada seção ancorada fica escondido
+     atrás dele ao navegar por #hash. */
+  scroll-padding-top: 5.5rem;
+}
+
+body {
+  background-color: var(--color-surface-0);
+  color: var(--color-ink-0);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background-color: var(--color-accent-glow);
+  color: var(--color-ink-0);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent-500);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Grid de fundo discreto usado como linguagem visual de dados */
+.bg-data-grid {
+  background-image:
+    linear-gradient(to right, var(--color-surface-border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-surface-border) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

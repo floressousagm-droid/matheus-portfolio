@@ -1,0 +1,58 @@
+{
+  "olho": "Sobre mim",
+  "titulo": "Minha Trajetória",
+  "paragrafos": [
+    "Antes do BI, tive contato com desenvolvimento web e me formei em Desenvolvimento de Software Multiplataforma. Ao longo da formação e dos projetos que desenvolvi, percebi que meu interesse estava menos no desenvolvimento tradicional e mais em entender problemas e usar dados para resolvê-los.",
+    "Foi no BI que encontrei essa combinação entre tecnologia, análise e negócio. Minha primeira oportunidade veio diretamente como Analista de BI Júnior, após já ter desenvolvido projetos relacionados à área.",
+    "Hoje, atuo em diferentes etapas do ciclo de BI, da estruturação e transformação dos dados à modelagem, indicadores e dashboards, buscando transformar problemas reais em soluções que apoiem decisões."
+  ],
+  "numeros": [
+    {
+      "id": "exp",
+      "rotulo": "Experiência profissional em BI",
+      "valor": "8 meses"
+    },
+    {
+      "id": "atuacao",
+      "rotulo": "Forma de atuação",
+      "valor": "Analista Júnior de BI"
+    },
+    {
+      "id": "formacao",
+      "rotulo": "Formação anterior",
+      "valor": "Dev. de Software Multiplataforma"
+    }
+  ],
+  "trajetoria": [
+    {
+      "id": "desenvolvimento",
+      "titulo": "Desenvolvimento",
+      "descricao": "Contato inicial com programação e desenvolvimento web."
+    },
+    {
+      "id": "estudos",
+      "titulo": "Estudos",
+      "descricao": "Graduação em Desenvolvimento de Software Multiplataforma; percepção de que o interesse real estava em dados e problemas de negócio."
+    },
+    {
+      "id": "bi",
+      "titulo": "BI",
+      "descricao": "Decisão de direcionar a trajetória para Business Intelligence, por unir tecnologia, análise, raciocínio e negócio."
+    },
+    {
+      "id": "primeiro-projeto",
+      "titulo": "Primeiro projeto real",
+      "descricao": "Primeira experiência profissional como Analista de BI Júnior; primeiro contato com dados, usuários e decisões reais."
+    },
+    {
+      "id": "atuacao-independente",
+      "titulo": "Responsabilidade pelo ciclo completo",
+      "descricao": "Responsabilidade por diferentes etapas das soluções de BI, da necessidade à entrega e manutenção."
+    },
+    {
+      "id": "evolucao",
+      "titulo": "Evolução contínua",
+      "descricao": "Aprendizado constante, uso de IA como ferramenta de produtividade, objetivo de caminhar para Pleno e, depois, Sênior."
+    }
+  ]
+}

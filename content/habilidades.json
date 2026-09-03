@@ -1,0 +1,39 @@
+{
+  "grupos": [
+    {
+      "id": "linguagens",
+      "titulo": "Linguagens e Banco de dados",
+      "habilidades": [
+        "Python para análise de dados",
+        "SQL para extração de dados",
+        "R para modelagem estatística (aprendendo)",
+        "Banco de dados SQLite, MySQL"
+      ]
+    },
+    {
+      "id": "visualizacao",
+      "titulo": "Visualização de dados e BI",
+      "habilidades": [
+        "Power BI",
+        "DAX",
+        "Power Query",
+        "ETL/ELT",
+        "Storytelling",
+        "Modelagem Dimensional"
+      ]
+    },
+    {
+      "id": "complementares",
+      "titulo": "Tecnologias Complementares",
+      "habilidades": [
+        "Excel",
+        "SharePoint",
+        "Figma",
+        "Git / GitHub",
+        "Claude AI",
+        "SAP Business One",
+        "API's"
+      ]
+    }
+  ]
+}

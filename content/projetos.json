@@ -1,0 +1,217 @@
+{
+  "projetos": [
+    {
+      "slug": "vendas-de-vendedores",
+      "ordem": 1,
+      "tipo": "profissional",
+      "nome": "Vendas de Vendedores",
+      "categoria": "Comercial · Performance de vendas",
+      "usuarios": [
+        "Gestores",
+        "Vendedores"
+      ],
+      "resumo": "Dashboard para acompanhamento de performance individual, metas e evolução das vendas.",
+      "contexto": "A área comercial precisava acompanhar a performance individual dos vendedores, metas e evolução das vendas.",
+      "problema": "Gestores e vendedores não tinham uma forma clara de entender o desempenho comercial e identificar rapidamente mudanças na performance.",
+      "objetivo": "Permitir que gestores e vendedores entendessem melhor o desempenho comercial e identificassem rapidamente mudanças na performance.",
+      "abordagem": "Responsabilidade pelo projeto de ponta a ponta: entendimento do problema, levantamento das necessidades, estruturação dos dados, tratamento, modelagem, criação de métricas, construção do dashboard, validação e entrega.",
+      "dados": "Dados de vendas provenientes do SAP Business One.",
+      "tecnologias": [
+        "SQL",
+        "Power BI",
+        "Power Query",
+        "DAX",
+        "ETL",
+        "Modelagem dimensional",
+        "Claude"
+      ],
+      "kpis": [
+        "Faturamento",
+        "Metas",
+        "Comparação mensal",
+        "Comparação anual",
+        "Variações",
+        "Desempenho individual",
+        "Clientes",
+        "Regiões",
+        "Setores",
+        "Períodos"
+      ],
+      "uso": "O usuário consegue acompanhar sua performance e comparar resultados com períodos anteriores, além de explorar os dados por diferentes dimensões (cliente, região, setor, período).",
+      "resultado": "O dashboard se tornou uma ferramenta importante para o acompanhamento de vendas e metas. O principal impacto foi facilitar o acesso às informações e permitir um acompanhamento mais frequente da performance comercial.",
+      "aprendizado": "Ganho de experiência com análises voltadas a vendas, metas e performance, além da definição de KPIs e do acompanhamento de indicadores para tomada de decisão.",
+      "avisoConfidencialidade": true,
+      "impacto": []
+    },
+    {
+      "slug": "dashboard-despesas",
+      "ordem": 2,
+      "tipo": "profissional",
+      "nome": "Dashboard Despesas",
+      "categoria": "Financeiro · Controladoria de Despesas",
+      "usuarios": [
+        "Diretoria Financeira",
+        "Controladoria"
+      ],
+      "resumo": "Dashboard para acompanhamento, análise e explicação do comportamento das despesas da empresa.",
+      "contexto": "A área financeira precisava monitorar e explicar o comportamento das despesas da empresa de forma centralizada e recorrente.",
+      "problema": "A diretoria não tinha uma forma clara de entender onde e por que as despesas estavam mudando, nem de identificar concentrações ou aumentos atípicos a tempo de agir.",
+      "objetivo": "Permitir que a diretoria entendesse rapidamente quanto, onde e por que as despesas mudam, identificando concentrações, tendências e pontos de atenção.",
+      "abordagem": "Responsabilidade pelo projeto de ponta a ponta: auditoria do modelo de dados existente, criação e reorganização de medidas DAX, desenvolvimento de componentes visuais customizados (HTML/CSS embutidos em DAX), alinhamento à identidade visual da marca, validação de cada entrega com dado real e documentação de decisões e limitações.",
+      "dados": "Dados de despesas provenientes de sistema ERP interno.",
+      "tecnologias": [
+        "Power BI",
+        "DAX",
+        "Power Query",
+        "Modelagem dimensional",
+        "HTML/CSS em DAX",
+        "Claude"
+      ],
+      "kpis": [
+        "Total de despesas",
+        "Variação mensal (MoM) e anual (YoY)",
+        "Despesa média mensal",
+        "Forecast anual",
+        "Concentração de despesas (Pareto)",
+        "Composição por categoria (Fixas/Variáveis/Ocasionais)",
+        "Pessoal e Ocupação",
+        "Maiores lançamentos",
+        "Qualidade de classificação dos dados"
+      ],
+      "uso": "O usuário consegue acompanhar a evolução das despesas, comparar com períodos anteriores e entender rapidamente os pontos de atenção do mês, com um resumo interpretativo automático destacando as leituras mais relevantes.",
+      "resultado": "O dashboard se tornou a principal ferramenta de leitura das despesas, reduzindo o tempo entre \"ver o número\" e \"entender o que ele significa\" para a tomada de decisão.",
+      "aprendizado": "Ganho de experiência em modelagem DAX avançada (Pareto, forecast, tratamento de contexto de filtro), construção de componentes visuais customizados dentro de um dashboard de BI, e em um processo de trabalho auditável e sem suposições de regra de negócio.",
+      "avisoConfidencialidade": true,
+      "impacto": [
+        {
+          "id": "interpretacao",
+          "descricao": "Redução do tempo necessário para interpretar as despesas do período."
+        },
+        {
+          "id": "concentracao",
+          "descricao": "Maior clareza sobre concentração e composição dos gastos."
+        },
+        {
+          "id": "centralizacao",
+          "descricao": "Centralização de informações antes dispersas."
+        },
+        {
+          "id": "desvios",
+          "descricao": "Identificação mais rápida de pontos de atenção e desvios."
+        },
+        {
+          "id": "planilhas",
+          "descricao": "Redução da dependência de análise manual em planilhas."
+        }
+      ]
+    },
+    {
+      "slug": "analise-precos-aco-inox",
+      "ordem": 3,
+      "tipo": "profissional",
+      "nome": "Dashboard Análise de Preços de Aço Inox",
+      "categoria": "Suprimentos · Controladoria de Compras",
+      "usuarios": [
+        "Diretoria de Compras",
+        "Controladoria de Custos"
+      ],
+      "resumo": "Dashboard para acompanhamento, análise e explicação do comportamento dos preços pagos por aço inox (matéria-prima) nos pedidos de compra e nas notas de entrada da empresa.",
+      "contexto": "A área de compras precisava monitorar se o preço pago pelo aço inox (ligas 304, 316, 410) estava alinhado ao mercado, combinando benchmark de commodities (Níquel, Molibdênio) com o histórico interno de pedidos e notas de entrada.",
+      "problema": "A diretoria não tinha uma forma objetiva de saber se um preço negociado estava caro, normalizado ou abaixo do mercado, nem de identificar desvios entre o que foi negociado no pedido e o que foi efetivamente recebido na nota de entrada.",
+      "objetivo": "Responder de forma direta e defensável: o preço pago pelo aço está caro, normalizado ou abaixo do mercado — combinando três camadas: benchmark de mercado, histórico interno e estatística de variabilidade.",
+      "abordagem": "Auditoria completa do modelo semântico, correção de bugs de qualidade de dados e lógica DAX (rankings, comparações temporais, integridade referencial), criação da camada de estatística de variabilidade e consolidação das medidas em estrutura única e organizada. Desenvolvimento de um resumo executivo em HTML/CSS embutido em medida DAX, com documentação de cada decisão e limitação encontrada.",
+      "dados": "Dados de pedidos de compra e notas de entrada provenientes de ERP (SAP B1), cruzados com cotações externas de Níquel e Molibdênio. O Claude foi usado via conector MCP, para modelagem e auditoria ao vivo do modelo semântico.",
+      "tecnologias": [
+        "Power BI",
+        "DAX",
+        "Modelagem dimensional (star schema)",
+        "HTML/CSS em DAX",
+        "Claude (via MCP)"
+      ],
+      "kpis": [
+        "Preço médio por Kg (Pedido e Entrada)",
+        "Variação vs. última compra e vs. mês anterior",
+        "Classificação de preço (acima do mercado / normalizado / abaixo do mercado)",
+        "Desvio % Pedido x Entrada e impacto financeiro do desvio",
+        "Custo teórico de liga (304/316) via cotações de Níquel/Molibdênio",
+        "Spread real vs. teórico entre ligas e % de cobertura",
+        "Desvio padrão, coeficiente de variação e Z-score do preço/kg",
+        "Ranking de material e fornecedor com maior variação/impacto",
+        "Indicadores de qualidade de dados (lançamentos com valor zero, fornecedores sem cadastro)"
+      ],
+      "uso": "A diretoria acompanha a evolução do preço pago pelo aço, compara pedido vs. entrada, identifica rapidamente materiais ou fornecedores fora do padrão e entende o desvio entre negociação e recebimento — com um resumo executivo automático destacando as leituras mais relevantes do período.",
+      "resultado": "O dashboard se tornou a referência para avaliar se o preço pago pelo aço está alinhado ao mercado, reduzindo a dependência de análise manual e dando à diretoria uma base objetiva — mercado + histórico + variabilidade — para decisões de compra e negociação.",
+      "aprendizado": "Aprofundamento em auditoria de qualidade de dados aplicada a modelos DAX e em construção de componentes visuais customizados (HTML/CSS em DAX) para uso dentro do próprio Power BI.",
+      "avisoConfidencialidade": true,
+      "impacto": [
+        {
+          "id": "leitura-preco",
+          "descricao": "Redução do tempo entre \"ver o preço\" e \"entender se ele está caro ou normal\"."
+        },
+        {
+          "id": "confiabilidade",
+          "descricao": "Maior confiabilidade dos números após a auditoria e correção de bugs de ranking e ancoragem temporal."
+        },
+        {
+          "id": "qualidade-dados",
+          "descricao": "Identificação de achados de qualidade de dados antes invisíveis (fornecedores órfãos, lançamentos com valor zero)."
+        },
+        {
+          "id": "decisao",
+          "descricao": "Base objetiva e documentada para decisões de compra e negociação."
+        },
+        {
+          "id": "medidas-unicas",
+          "descricao": "Centralização da lógica de negócio em medidas DAX únicas, sem duplicidade entre dashboards."
+        }
+      ]
+    },
+    {
+      "slug": "painel-tv-desempenho-comercial",
+      "ordem": 4,
+      "tipo": "profissional",
+      "nome": "Painel TV de Desempenho Comercial",
+      "categoria": "Comercial · Gestão de Vendas",
+      "usuarios": [
+        "Diretoria Comercial",
+        "Gestão de Vendas"
+      ],
+      "resumo": "Painel para exibição em TV com acompanhamento em tempo real do desempenho da equipe comercial frente às metas diárias e mensais.",
+      "contexto": "A equipe comercial precisava de uma forma rápida e visível de acompanhar o progresso das metas ao longo do dia e do mês, sem depender de relatórios ou planilhas que exigissem análise detalhada.",
+      "problema": "Não havia um painel de fácil leitura à distância que mostrasse, de forma imediata, se a equipe estava dentro, acima ou abaixo do ritmo necessário para bater a meta — nem uma visão simples do desempenho individual de cada vendedor.",
+      "objetivo": "Fornecer uma visão instantânea e visível à distância do progresso das metas (diária e mensal) e do desempenho por vendedor, destacando apenas o que exige atenção, sem sobrecarregar o painel com informações.",
+      "abordagem": "Definição de um conjunto enxuto de indicadores essenciais, criação de medidas DAX reutilizáveis e padronizadas (com tratamento de valores nulos e respeito ao contexto de filtros), e um layout otimizado para TV — cartões grandes, poucas cores e poucos filtros — priorizando simplicidade, legibilidade e desempenho de carregamento.",
+      "dados": "",
+      "tecnologias": [
+        "Power BI",
+        "DAX",
+        "Layout otimizado para TV"
+      ],
+      "kpis": [
+        "Meta diária e faturamento do dia",
+        "Meta mensal e faturamento do mês",
+        "Percentual de atingimento da meta",
+        "Desempenho por vendedor",
+        "Indicadores de clientes (ativos/atendidos, conforme disponibilidade dos dados)"
+      ],
+      "uso": "A equipe comercial acompanha em tempo real, direto na TV, o ritmo de faturamento do dia e do mês frente às metas, além do desempenho individual de cada vendedor — com destaque visual apenas para situações que exigem atenção.",
+      "resultado": "Um painel simples, de leitura rápida e consistente, que se tornou referência diária para o acompanhamento das metas comerciais, sem exigir interpretação ou análise adicional da equipe.",
+      "aprendizado": "Aplicação de princípios de design para dashboards de exibição em TV (simplicidade, hierarquia visual e leitura à distância) e consolidação de lógica de negócio em medidas DAX únicas e padronizadas.",
+      "avisoConfidencialidade": false,
+      "impacto": [
+        {
+          "id": "acompanhamento-visual",
+          "descricao": "Acompanhamento mais rápido e visual do progresso das metas pela equipe comercial."
+        },
+        {
+          "id": "ruido",
+          "descricao": "Redução de ruído visual, com destaque apenas para pontos que exigem atenção."
+        },
+        {
+          "id": "padronizacao",
+          "descricao": "Padronização das medidas de meta e faturamento, evitando duplicidade entre indicadores."
+        }
+      ]
+    }
+  ]
+}
