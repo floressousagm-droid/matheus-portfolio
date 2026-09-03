@@ -12,6 +12,12 @@ import { config, fields, singleton } from "@keystatic/core";
  * - Não há campos de "identificador" para o usuário inventar: onde o código
  *   precisava de um, ou ele é gerado sozinho, ou virou uma lista de opções.
  *
+ * Onde roda:
+ * - Só em desenvolvimento (`npm run dev` → /keystatic). Em produção as rotas do
+ *   painel respondem 404. O modo de armazenamento local grava sem autenticação,
+ *   o que é adequado na sua máquina e inaceitável num site público.
+ * - O fluxo é: editar local → commitar → push → a Vercel republica.
+ *
  * Modelagem:
  * - Tudo é `singleton` (um JSON por área), e não `collection`, para o conteúdo
  *   continuar importável estaticamente por `data/*.ts` — é isso que mantém o
@@ -21,20 +27,6 @@ import { config, fields, singleton } from "@keystatic/core";
  * - As recriações de dashboard também: são componentes React
  *   (`components/projects/mockup/`), não conteúdo.
  */
-
-const GITHUB_REPO = process.env.NEXT_PUBLIC_GITHUB_REPO;
-
-/**
- * O modo "local" grava sem autenticação nenhuma — correto em desenvolvimento,
- * inaceitável em produção (deixaria `POST /api/keystatic/update` aberto).
- * Por isso a escolha abaixo falha FECHADO: em produção sem repo configurado,
- * não cai para local; o painel é desligado nas rotas (ver app/keystatic/ e
- * app/api/keystatic/). Atenção: `NEXT_PUBLIC_*` é embutido em build time, então
- * a variável precisa existir em TODOS os ambientes da Vercel — inclusive
- * Preview — e não só em Production.
- */
-const EM_PRODUCAO = process.env.NODE_ENV === "production";
-const USAR_LOCAL = !EM_PRODUCAO && !GITHUB_REPO;
 
 const OBRIGATORIO = { isRequired: true } as const;
 
@@ -64,9 +56,10 @@ const ICONES_RESPONSABILIDADES = [
 export default config({
   // Em produção grava via GitHub (vira commit + republicação na Vercel);
   // em desenvolvimento grava direto nos arquivos locais.
-  storage: USAR_LOCAL
-    ? { kind: "local" }
-    : { kind: "github", repo: (GITHUB_REPO ?? "repo/nao-configurado") as `${string}/${string}` },
+  // Sempre local: o painel roda apenas em desenvolvimento e grava direto nos
+  // arquivos. Em produção as rotas do painel respondem 404 (ver
+  // app/keystatic/ e app/api/keystatic/), então este modo nunca fica exposto.
+  storage: { kind: "local" },
 
   locale: "pt-BR",
 
