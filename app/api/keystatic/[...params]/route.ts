@@ -3,18 +3,21 @@ import { makeRouteHandler } from "@keystatic/next/route-handler";
 import config from "@/keystatic.config";
 
 /**
- * O painel só existe em desenvolvimento.
+ * Segunda camada de proteção do painel.
  *
- * O armazenamento é local (grava direto nos arquivos), o que **não tem
- * autenticação nenhuma**: em um site público isso deixaria
- * `POST /api/keystatic/update` aberto para qualquer visitante. Por isso, em
- * produção, todas as rotas do painel respondem 404.
+ * A primeira é o `proxy.ts`, que exige sessão antes desta rota rodar. Esta aqui
+ * cobre o outro risco: sem `NEXT_PUBLIC_GITHUB_REPO`, o Keystatic cairia para o
+ * armazenamento local, que grava **sem autenticação nenhuma**. Adequado na sua
+ * máquina, inaceitável em produção.
  *
- * O fluxo de publicação é: editar local → commitar → push → a Vercel republica.
+ * `makeRouteHandler` só é construído quando o painel está disponível — chamá-lo
+ * em modo GitHub sem as chaves lança erro e derrubaria o build do site inteiro,
+ * não só do painel.
  */
-const emDesenvolvimento = process.env.NODE_ENV !== "production";
+const painelDisponivel =
+  process.env.NODE_ENV !== "production" || Boolean(process.env.NEXT_PUBLIC_GITHUB_REPO);
 
-const handlers = emDesenvolvimento ? makeRouteHandler({ config }) : null;
+const handlers = painelDisponivel ? makeRouteHandler({ config }) : null;
 const naoEncontrado = () => new Response("Not Found", { status: 404 });
 
 export const GET = handlers?.GET ?? naoEncontrado;

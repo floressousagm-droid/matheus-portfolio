@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
 import { identity } from "@/data/site";
+import { excedeuLimite, ipDaRequisicao } from "@/lib/rate-limit";
 
 // Route Handler que recebe o formulário de contato e envia a mensagem por
 // e-mail via Resend. Precisa da variável de ambiente RESEND_API_KEY
@@ -22,45 +23,10 @@ function isValidEmail(value: string) {
 // requisição. Generosos para uso real, apertados para abuso.
 const LIMITES = { nome: 100, email: 200, mensagem: 5000 } as const;
 
-// Rate limit por IP, em memória.
-//
-// Ressalva honesta: em serverless a memória é por instância, então isso não é
-// uma barreira forte — instâncias novas começam com o contador zerado. Ainda
-// assim corta o caso real (um script em loop reusa a mesma instância quente) e
-// não exige serviço externo. Se o formulário virar alvo de verdade, trocar por
-// um contador compartilhado (Vercel KV / Upstash).
-const JANELA_MS = 10 * 60 * 1000;
-const MAX_POR_JANELA = 5;
-const envios = new Map<string, number[]>();
-
-function excedeuLimite(ip: string): boolean {
-  const agora = Date.now();
-  const recentes = (envios.get(ip) ?? []).filter((t) => agora - t < JANELA_MS);
-
-  if (recentes.length >= MAX_POR_JANELA) {
-    envios.set(ip, recentes);
-    return true;
-  }
-
-  recentes.push(agora);
-  envios.set(ip, recentes);
-
-  // Impede o Map de crescer sem limite na instância.
-  if (envios.size > 1000) {
-    for (const [chave, marcas] of envios) {
-      if (marcas.every((t) => agora - t >= JANELA_MS)) envios.delete(chave);
-    }
-  }
-  return false;
-}
+const LIMITE_ENVIO = { max: 5, janelaMs: 10 * 60 * 1000 };
 
 export async function POST(request: Request) {
-  const ip =
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    request.headers.get("x-real-ip") ||
-    "desconhecido";
-
-  if (excedeuLimite(ip)) {
+  if (excedeuLimite(`contato:${ipDaRequisicao(request)}`, LIMITE_ENVIO)) {
     return NextResponse.json(
       { error: "Muitas mensagens em pouco tempo. Tente novamente mais tarde." },
       { status: 429 },

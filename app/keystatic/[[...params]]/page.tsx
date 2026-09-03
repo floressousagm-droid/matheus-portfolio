@@ -5,8 +5,9 @@ import { makePage } from "@keystatic/next/ui/app";
 
 import config from "@/keystatic.config";
 
-// Mesma regra da rota de API (ver o comentário lá): o painel grava sem
-// autenticação, então só existe em desenvolvimento.
-const emDesenvolvimento = process.env.NODE_ENV !== "production";
+// Mesma regra da rota de API (ver o comentário lá). O acesso em si é barrado
+// antes, pelo proxy.ts — isto evita servir o painel em modo local por engano.
+const painelDisponivel =
+  process.env.NODE_ENV !== "production" || Boolean(process.env.NEXT_PUBLIC_GITHUB_REPO);
 
-export default emDesenvolvimento ? makePage(config) : () => notFound();
+export default painelDisponivel ? makePage(config) : () => notFound();

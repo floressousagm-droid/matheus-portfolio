@@ -12,11 +12,14 @@ import { config, fields, singleton } from "@keystatic/core";
  * - Não há campos de "identificador" para o usuário inventar: onde o código
  *   precisava de um, ou ele é gerado sozinho, ou virou uma lista de opções.
  *
- * Onde roda:
- * - Só em desenvolvimento (`npm run dev` → /keystatic). Em produção as rotas do
- *   painel respondem 404. O modo de armazenamento local grava sem autenticação,
- *   o que é adequado na sua máquina e inaceitável num site público.
- * - O fluxo é: editar local → commitar → push → a Vercel republica.
+ * Acesso:
+ * - O painel fica atrás de uma senha (ver `proxy.ts` e `app/painel/login/`).
+ *   Sem sessão válida, nem o HTML do Keystatic é servido.
+ * - Em produção o armazenamento é o GitHub: cada "Save" vira um commit e a
+ *   Vercel republica. Isso exige o login do GitHub por dentro do painel, porque
+ *   o Keystatic não tem modo com token de servidor — a gravação acontece como
+ *   você, pela API do GitHub.
+ * - Localmente, sem `NEXT_PUBLIC_GITHUB_REPO`, grava direto nos arquivos.
  *
  * Modelagem:
  * - Tudo é `singleton` (um JSON por área), e não `collection`, para o conteúdo
@@ -27,6 +30,8 @@ import { config, fields, singleton } from "@keystatic/core";
  * - As recriações de dashboard também: são componentes React
  *   (`components/projects/mockup/`), não conteúdo.
  */
+
+const GITHUB_REPO = process.env.NEXT_PUBLIC_GITHUB_REPO;
 
 const OBRIGATORIO = { isRequired: true } as const;
 
@@ -56,10 +61,12 @@ const ICONES_RESPONSABILIDADES = [
 export default config({
   // Em produção grava via GitHub (vira commit + republicação na Vercel);
   // em desenvolvimento grava direto nos arquivos locais.
-  // Sempre local: o painel roda apenas em desenvolvimento e grava direto nos
-  // arquivos. Em produção as rotas do painel respondem 404 (ver
-  // app/keystatic/ e app/api/keystatic/), então este modo nunca fica exposto.
-  storage: { kind: "local" },
+  // Com repo configurado, grava via GitHub (commit + republicação). Sem ele,
+  // grava nos arquivos locais — o que só acontece em desenvolvimento, porque em
+  // produção o painel exige `NEXT_PUBLIC_GITHUB_REPO` (ver app/api/keystatic/).
+  storage: GITHUB_REPO
+    ? { kind: "github", repo: GITHUB_REPO as `${string}/${string}` }
+    : { kind: "local" },
 
   locale: "pt-BR",
 
