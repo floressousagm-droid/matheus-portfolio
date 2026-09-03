@@ -46,18 +46,80 @@ lib/                     tipos e utilitários (cn, hook de prefers-reduced-motio
 content/                 PORTFOLIO_CONTEUDO.md — documento de conteúdo/narrativa completo
 ```
 
+## Painel de edição
+
+O conteúdo do site (textos e projetos) é editado por um painel, sem mexer no código.
+
+### Onde o conteúdo mora
+
+Os textos ficam em `content/*.json`. Os arquivos em `data/*.ts` **não são mais
+conteúdo**: viraram uma ponte tipada entre aquele JSON e os componentes — é lá que
+campo vazio vira "não exibir", que o checkbox de confidencialidade vira o aviso, etc.
+Editar `content/` pelo painel é o caminho normal; mexer em `data/` só é necessário
+para mudar comportamento.
+
+### Editando localmente (sem configurar nada)
+
+```bash
+npm run dev
+```
+
+Abra <http://localhost:3000/keystatic>. Sem login: o painel grava direto nos arquivos
+em `content/`, e o site recarrega na hora. Depois é só commitar e dar push.
+
+### Editando de qualquer lugar (produção)
+
+Em produção o painel grava via GitHub: cada "Save" vira um commit, e a Vercel
+republica sozinha em ~1 minuto. Configuração, uma única vez:
+
+1. **Suba o repositório para o GitHub.** O projeto já está inicializado com git:
+
+   ```bash
+   git remote add origin https://github.com/SEU-USUARIO/SEU-REPO.git
+   git push -u origin main
+   ```
+
+2. **Faça o deploy na Vercel**, importando esse repositório.
+
+3. **Crie o GitHub App.** Com o site já no ar, acesse
+   `https://SEU-SITE.vercel.app/keystatic/setup` — o próprio Keystatic conduz a
+   criação do app e mostra as chaves ao final.
+
+4. **Configure as variáveis na Vercel** (Settings → Environment Variables), usando os
+   valores que a tela anterior mostrou:
+
+   | Variável | O que é |
+   | --- | --- |
+   | `NEXT_PUBLIC_GITHUB_REPO` | `seu-usuario/seu-repo` |
+   | `NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG` | slug do app criado |
+   | `KEYSTATIC_GITHUB_CLIENT_ID` | do app |
+   | `KEYSTATIC_GITHUB_CLIENT_SECRET` | do app |
+   | `KEYSTATIC_SECRET` | segredo aleatório gerado pelo setup |
+
+5. **Refaça o deploy.** A partir daí, `SEU-SITE.vercel.app/keystatic` pede login do
+   GitHub — só quem tem acesso ao repositório consegue editar.
+
+> `NEXT_PUBLIC_GITHUB_REPO` é o que decide o modo: **vazia = grava local**, preenchida
+> = grava via GitHub. Por isso o painel funciona local sem nenhuma configuração, e em
+> produção sem trocar código.
+
+### O que o painel NÃO edita (de propósito)
+
+- **O menu** (`data/nav.ts`): os ids precisam bater com os ids das seções na página.
+  Editar pelo painel quebraria as âncoras sem aviso.
+- **As recriações de dashboard** (`components/projects/mockup/`): são componentes
+  React, não conteúdo. Um projeto novo criado pelo painel simplesmente não exibe
+  mockup até que alguém escreva o dele.
+
 ## Como adicionar um novo projeto
 
-Toda a seção de projetos foi construída para crescer sem alterar a arquitetura:
-
-1. Abra `data/projects.ts`.
-2. Copie o objeto do projeto existente e preencha os mesmos campos para o novo case.
-3. Defina um `slug` único e um `order` (define a posição no grid).
-4. Nada mais precisa ser alterado — o card na home e a página `/projetos/[slug]` são
-   gerados automaticamente a partir do array.
+Pelo painel: **Projetos → Add**, preencher os campos e salvar. O card na home e a
+página `/projetos/[slug]` são gerados automaticamente. O campo "Ordem" define a
+posição no grid, e "Aba" escolhe entre Profissionais e Pessoais.
 
 Sempre revise a seção "Regras de confidencialidade" e "Regra de autenticidade" no
-`content/PORTFOLIO_CONTEUDO.md` antes de publicar um novo case.
+`content/PORTFOLIO_CONTEUDO.md` antes de publicar um novo case — o painel não impõe
+essas regras sozinho.
 
 ## Design
 
