@@ -29,7 +29,13 @@ function normalizarImpacto(
   return itens.map((item) => ({ id: item.id, description: item.descricao }));
 }
 
-export const projects: Project[] = projetosJson.projetos.map((projeto) => ({
+// Um "Add" no painel que ainda não foi preenchido não tem slug — filtrar
+// aqui evita que um rascunho salvo por engano derrube o site inteiro.
+const projetosPublicaveis = projetosJson.projetos.filter(
+  (projeto): projeto is typeof projeto & { slug: string } => Boolean(projeto.slug?.trim()),
+);
+
+export const projects: Project[] = projetosPublicaveis.map((projeto) => ({
   slug: projeto.slug,
   order: projeto.ordem,
   kind: normalizarTipo(projeto.tipo),
@@ -41,8 +47,9 @@ export const projects: Project[] = projetosJson.projetos.map((projeto) => ({
   problem: projeto.problema,
   objective: projeto.objetivo,
   approach: projeto.abordagem,
-  // Campo vazio no painel significa "fonte não declarada".
-  data: projeto.dados.trim() || undefined,
+  // Campo vazio no painel significa "fonte não declarada". Texto vazio faz
+  // o Keystatic omitir a própria chave do JSON — daí o `?.`.
+  data: projeto.dados?.trim() || undefined,
   technologies: projeto.tecnologias,
   kpis: projeto.kpis,
   usage: projeto.uso,

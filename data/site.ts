@@ -19,9 +19,10 @@ export const identity = {
   role: identidadeJson.cargo,
   location: identidadeJson.localizacao,
   email: identidadeJson.email,
-  // Vazio no painel significa "não exibir o link".
-  linkedin: (identidadeJson.linkedin.trim() || null) as string | null,
-  github: (identidadeJson.github.trim() || null) as string | null,
+  // Vazio no painel significa "não exibir o link". Texto vazio faz o
+  // Keystatic omitir a própria chave do JSON — daí o `?.`.
+  linkedin: (identidadeJson.linkedin?.trim() || null) as string | null,
+  github: (identidadeJson.github?.trim() || null) as string | null,
 };
 
 export const hero = {
