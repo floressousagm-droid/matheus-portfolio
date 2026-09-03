@@ -113,7 +113,7 @@ export function ResponsibilitiesWave({ groups }: ResponsibilitiesWaveProps) {
             viewport={{ once: true }}
             transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
           />
-          {!prefersReducedMotion && firstPoint ? (
+          {!prefersReducedMotion && firstPoint && vbPoints.length > 1 ? (
             <motion.circle
               r={3}
               fill="var(--color-accent-300)"

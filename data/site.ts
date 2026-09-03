@@ -1,59 +1,83 @@
 import type { TimelineMarker } from "@/lib/types";
 
-import contatoJson from "@/content/contato.json";
-import heroJson from "@/content/hero.json";
-import identidadeJson from "@/content/identidade.json";
-import sobreJson from "@/content/sobre.json";
+import contatoRaw from "@/content/contato.json";
+import heroRaw from "@/content/hero.json";
+import identidadeRaw from "@/content/identidade.json";
+import sobreRaw from "@/content/sobre.json";
+import type {
+  ConteudoContato,
+  ConteudoHero,
+  ConteudoIdentidade,
+  ConteudoSobre,
+} from "@/lib/content-schema";
+
+// O cast é essencial: sem ele o TypeScript infere o tipo a partir das chaves
+// que existem no arquivo hoje, e limpar um campo pelo painel quebraria o build.
+const identidadeJson = identidadeRaw as ConteudoIdentidade;
+const heroJson = heroRaw as ConteudoHero;
+const sobreJson = sobreRaw as ConteudoSobre;
+const contatoJson = contatoRaw as ConteudoContato;
 
 /**
  * Textos do site.
  *
- * O conteúdo em si vive em `content/*.json`, editável pelo painel em
- * `/keystatic`. Este arquivo é só a ponte tipada entre aquele JSON e os
- * componentes — é aqui que campos vazios viram `null`/`undefined` e que os
- * nomes em português do painel viram os nomes usados no código.
+ * O conteúdo vive em `content/*.json`, editável pelo painel em `/keystatic`.
+ * Este arquivo é a ponte tipada entre aquele JSON e os componentes.
+ *
+ * Todo acesso aqui é defensivo de propósito: quando um campo de texto fica
+ * vazio no painel, o Keystatic **remove a chave inteira** do JSON em vez de
+ * gravar `""`. Ler direto (`x.trim()`) derruba o site — daí o `?? ""` em tudo.
  */
 
+/** Normaliza um campo de texto que pode estar vazio ou ausente. */
+function texto(valor: string | null | undefined): string {
+  return (valor ?? "").trim();
+}
+
 export const identity = {
-  name: identidadeJson.nome,
-  role: identidadeJson.cargo,
-  location: identidadeJson.localizacao,
-  email: identidadeJson.email,
-  // Vazio no painel significa "não exibir o link". Texto vazio faz o
-  // Keystatic omitir a própria chave do JSON — daí o `?.`.
-  linkedin: (identidadeJson.linkedin?.trim() || null) as string | null,
-  github: (identidadeJson.github?.trim() || null) as string | null,
+  name: texto(identidadeJson.nome),
+  role: texto(identidadeJson.cargo),
+  location: texto(identidadeJson.localizacao),
+  email: texto(identidadeJson.email),
+  // Vazio no painel significa "não exibir o link".
+  linkedin: (texto(identidadeJson.linkedin) || null) as string | null,
+  github: (texto(identidadeJson.github) || null) as string | null,
 };
 
 export const hero = {
-  greeting: heroJson.saudacao,
+  greeting: texto(heroJson.saudacao),
   name: identity.name,
-  firstName: heroJson.primeiroNome,
-  lastName: heroJson.sobrenome,
+  firstName: texto(heroJson.primeiroNome),
+  lastName: texto(heroJson.sobrenome),
   role: identity.role,
-  headline: heroJson.manchete,
-  subtext: heroJson.texto,
+  headline: (heroJson.manchete ?? []).map(texto).filter(Boolean),
+  subtext: texto(heroJson.texto),
 };
 
 export const about = {
-  eyebrow: sobreJson.olho,
-  heading: sobreJson.titulo,
-  paragraphs: sobreJson.paragrafos,
-  stats: sobreJson.numeros.map((numero) => ({
-    id: numero.id,
-    label: numero.rotulo,
-    value: numero.valor,
-  })),
+  eyebrow: texto(sobreJson.olho),
+  heading: texto(sobreJson.titulo),
+  paragraphs: (sobreJson.paragrafos ?? []).map(texto).filter(Boolean),
+  stats: (sobreJson.numeros ?? [])
+    .filter((numero) => texto(numero.rotulo) && texto(numero.valor))
+    // O id existe só como chave de renderização — é gerado, não editado.
+    .map((numero, index) => ({
+      id: `numero-${index}`,
+      label: texto(numero.rotulo),
+      value: texto(numero.valor),
+    })),
 };
 
-export const timeline: TimelineMarker[] = sobreJson.trajetoria.map((marco) => ({
-  id: marco.id,
-  title: marco.titulo,
-  description: marco.descricao,
-}));
+export const timeline: TimelineMarker[] = (sobreJson.trajetoria ?? [])
+  .filter((marco) => texto(marco.titulo))
+  .map((marco, index) => ({
+    id: `marco-${index}`,
+    title: texto(marco.titulo),
+    description: texto(marco.descricao),
+  }));
 
 export const contact = {
-  eyebrow: contatoJson.olho,
-  heading: contatoJson.titulo,
-  support: contatoJson.apoio,
+  eyebrow: texto(contatoJson.olho),
+  heading: texto(contatoJson.titulo),
+  support: texto(contatoJson.apoio),
 };

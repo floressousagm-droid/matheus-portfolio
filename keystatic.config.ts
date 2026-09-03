@@ -3,20 +3,51 @@ import { config, fields, singleton } from "@keystatic/core";
 /**
  * Painel de edição do portfólio.
  *
- * Decisões de modelagem:
- * - Tudo é `singleton` (um arquivo JSON por área), e não `collection`. Isso
- *   mantém o conteúdo importável estaticamente por `data/*.ts`, inclusive de
- *   componentes client — que é o que permite o site continuar 100% estático,
- *   sem leitura de disco em tempo de execução.
- * - Os rótulos estão em português porque o painel é operado pelo Matheus.
- * - O menu (`data/nav.ts`) fica de fora de propósito: os ids precisam bater
- *   com os ids das seções na página; editá-los pelo painel quebraria as
- *   âncoras sem aviso.
- * - As recriações de dashboard também ficam de fora: são componentes React
+ * Convenções:
+ * - Campos marcados com `*` são obrigatórios: o painel recusa o "Save" se
+ *   estiverem vazios. São poucos, e só onde a ausência quebra o site ou deixa
+ *   o item sem sentido (ex.: um projeto sem slug não tem endereço).
+ * - Todo o resto é opcional. Campo vazio simplesmente não é renderizado — o
+ *   bloco correspondente some da página em vez de aparecer em branco.
+ * - Não há campos de "identificador" para o usuário inventar: onde o código
+ *   precisava de um, ou ele é gerado sozinho, ou virou uma lista de opções.
+ *
+ * Modelagem:
+ * - Tudo é `singleton` (um JSON por área), e não `collection`, para o conteúdo
+ *   continuar importável estaticamente por `data/*.ts` — é isso que mantém o
+ *   site 100% estático.
+ * - O menu (`data/nav.ts`) fica de fora: os ids precisam bater com os ids das
+ *   seções na página, e editá-los pelo painel quebraria as âncoras.
+ * - As recriações de dashboard também: são componentes React
  *   (`components/projects/mockup/`), não conteúdo.
  */
 
 const GITHUB_REPO = process.env.NEXT_PUBLIC_GITHUB_REPO;
+
+const OBRIGATORIO = { isRequired: true } as const;
+
+/** Ícones disponíveis para os grupos de habilidades (ver `components/skills/skills.tsx`). */
+const ICONES_HABILIDADES = [
+  { label: "Banco de dados", value: "linguagens" },
+  { label: "Gráfico / BI", value: "visualizacao" },
+  { label: "Camadas", value: "complementares" },
+  { label: "Código", value: "codigo" },
+  { label: "Nuvem", value: "nuvem" },
+  { label: "Ferramentas", value: "ferramentas" },
+] as const;
+
+/** Ícones das etapas do ciclo de BI (ver `components/responsibilities/`). */
+const ICONES_RESPONSABILIDADES = [
+  { label: "Pessoas / negócio", value: "negocio" },
+  { label: "Banco de dados", value: "dados" },
+  { label: "Filtro / ETL", value: "etl" },
+  { label: "Camadas / modelagem", value: "modelagem" },
+  { label: "Calculadora / métricas", value: "metricas" },
+  { label: "Gráfico / visualização", value: "visualizacao" },
+  { label: "Escudo / validação", value: "validacao" },
+  { label: "Foguete / publicação", value: "publicacao" },
+  { label: "Faísca / automação", value: "automacao" },
+] as const;
 
 export default config({
   // Em produção grava via GitHub (vira commit + republicação na Vercel);
@@ -24,6 +55,8 @@ export default config({
   storage: GITHUB_REPO
     ? { kind: "github", repo: GITHUB_REPO as `${string}/${string}` }
     : { kind: "local" },
+
+  locale: "pt-BR",
 
   ui: {
     brand: { name: "Portfólio — Matheus Flores" },
@@ -40,17 +73,33 @@ export default config({
       path: "content/identidade",
       format: { data: "json" },
       schema: {
-        nome: fields.text({ label: "Nome" }),
-        cargo: fields.text({ label: "Cargo" }),
-        localizacao: fields.text({ label: "Localização" }),
-        email: fields.text({ label: "E-mail" }),
+        nome: fields.text({
+          label: "Nome",
+          description: "Obrigatório. Aparece no topo, no rodapé e no título da aba do navegador.",
+          validation: OBRIGATORIO,
+        }),
+        cargo: fields.text({
+          label: "Cargo",
+          description: "Obrigatório. Aparece abaixo do nome e no título da aba.",
+          validation: OBRIGATORIO,
+        }),
+        email: fields.text({
+          label: "E-mail",
+          description:
+            "Obrigatório. Além de aparecer no site, é para onde o formulário de contato envia as mensagens.",
+          validation: OBRIGATORIO,
+        }),
+        localizacao: fields.text({
+          label: "Localização",
+          description: "Opcional. Vazio esconde a linha.",
+        }),
         linkedin: fields.text({
           label: "LinkedIn (URL)",
-          description: "Deixe vazio para esconder o link.",
+          description: "Opcional. Vazio esconde o link.",
         }),
         github: fields.text({
           label: "GitHub (URL)",
-          description: "Deixe vazio para esconder o link.",
+          description: "Opcional. Vazio esconde o link.",
         }),
       },
     }),
@@ -60,15 +109,30 @@ export default config({
       path: "content/hero",
       format: { data: "json" },
       schema: {
-        saudacao: fields.text({ label: "Saudação" }),
-        primeiroNome: fields.text({ label: "Primeiro nome" }),
-        sobrenome: fields.text({ label: "Sobrenome" }),
+        primeiroNome: fields.text({
+          label: "Primeiro nome",
+          description: "Obrigatório. É o título principal da página.",
+          validation: OBRIGATORIO,
+        }),
+        sobrenome: fields.text({
+          label: "Sobrenome",
+          description: "Opcional. Aparece destacado em azul ao lado do primeiro nome.",
+        }),
+        saudacao: fields.text({
+          label: "Saudação",
+          description: 'Opcional. Ex.: "Olá, me chamo". Vazio esconde a linha.',
+        }),
         manchete: fields.array(fields.text({ label: "Linha" }), {
           label: "Manchete",
-          description: "Uma linha por frase. A última palavra de cada linha recebe destaque.",
-          itemLabel: (props) => props.value,
+          description:
+            "Opcional. Uma linha por frase; a última palavra de cada linha recebe destaque. Vazio esconde o bloco.",
+          itemLabel: (props) => props.value || "(linha vazia)",
         }),
-        texto: fields.text({ label: "Texto de apresentação", multiline: true }),
+        texto: fields.text({
+          label: "Texto de apresentação",
+          description: "Opcional. Vazio esconde o parágrafo.",
+          multiline: true,
+        }),
       },
     }),
 
@@ -77,32 +141,57 @@ export default config({
       path: "content/sobre",
       format: { data: "json" },
       schema: {
-        olho: fields.text({ label: "Olho (texto pequeno acima do título)" }),
-        titulo: fields.text({ label: "Título" }),
+        titulo: fields.text({
+          label: "Título da seção",
+          description: "Obrigatório.",
+          validation: OBRIGATORIO,
+        }),
+        olho: fields.text({
+          label: "Olho (texto pequeno acima do título)",
+          description: "Opcional. Vazio esconde a linha.",
+        }),
         paragrafos: fields.array(fields.text({ label: "Parágrafo", multiline: true }), {
           label: "Parágrafos",
-          itemLabel: (props) => props.value.slice(0, 60) + "…",
+          description: "Opcional.",
+          itemLabel: (props) => props.value.slice(0, 60) || "(parágrafo vazio)",
         }),
         numeros: fields.array(
           fields.object({
-            id: fields.text({ label: "Identificador (sem espaços)" }),
-            rotulo: fields.text({ label: "Rótulo" }),
-            valor: fields.text({ label: "Valor" }),
+            rotulo: fields.text({
+              label: "Rótulo",
+              description: "Obrigatório.",
+              validation: OBRIGATORIO,
+            }),
+            valor: fields.text({
+              label: "Valor",
+              description: "Obrigatório.",
+              validation: OBRIGATORIO,
+            }),
           }),
           {
             label: "Números em destaque",
-            itemLabel: (props) => `${props.fields.rotulo.value}: ${props.fields.valor.value}`,
+            description: "Opcional.",
+            itemLabel: (props) =>
+              `${props.fields.rotulo.value || "?"}: ${props.fields.valor.value || "?"}`,
           },
         ),
         trajetoria: fields.array(
           fields.object({
-            id: fields.text({ label: "Identificador (sem espaços)" }),
-            titulo: fields.text({ label: "Título" }),
-            descricao: fields.text({ label: "Descrição", multiline: true }),
+            titulo: fields.text({
+              label: "Título",
+              description: "Obrigatório.",
+              validation: OBRIGATORIO,
+            }),
+            descricao: fields.text({
+              label: "Descrição",
+              description: "Opcional.",
+              multiline: true,
+            }),
           }),
           {
             label: "Linha do tempo",
-            itemLabel: (props) => props.fields.titulo.value,
+            description: "Opcional. A numeração (01, 02, …) é gerada sozinha.",
+            itemLabel: (props) => props.fields.titulo.value || "(sem título)",
           },
         ),
       },
@@ -115,19 +204,26 @@ export default config({
       schema: {
         grupos: fields.array(
           fields.object({
-            id: fields.text({
-              label: "Identificador",
-              description: "Define o ícone. Use: linguagens, visualizacao ou complementares.",
+            titulo: fields.text({
+              label: "Título do grupo",
+              description: "Obrigatório.",
+              validation: OBRIGATORIO,
             }),
-            titulo: fields.text({ label: "Título do grupo" }),
+            id: fields.select({
+              label: "Ícone",
+              description: "Obrigatório. Escolha o ícone exibido acima do grupo.",
+              options: ICONES_HABILIDADES,
+              defaultValue: "complementares",
+            }),
             habilidades: fields.array(fields.text({ label: "Habilidade" }), {
               label: "Habilidades",
-              itemLabel: (props) => props.value,
+              description: "Opcional.",
+              itemLabel: (props) => props.value || "(vazio)",
             }),
           }),
           {
             label: "Grupos",
-            itemLabel: (props) => props.fields.titulo.value,
+            itemLabel: (props) => props.fields.titulo.value || "(sem título)",
           },
         ),
       },
@@ -140,22 +236,32 @@ export default config({
       schema: {
         grupos: fields.array(
           fields.object({
-            id: fields.text({
-              label: "Identificador",
-              description:
-                "Define o ícone. Use: negocio, dados, etl, modelagem, metricas, visualizacao, validacao, publicacao ou automacao.",
+            titulo: fields.text({
+              label: "Título",
+              description: "Obrigatório.",
+              validation: OBRIGATORIO,
             }),
-            titulo: fields.text({ label: "Título" }),
-            curto: fields.text({ label: "Título curto (usado no diagrama)" }),
-            resumo: fields.text({ label: "Resumo", multiline: true }),
-            itens: fields.array(fields.text({ label: "Item" }), {
-              label: "Itens detalhados",
-              itemLabel: (props) => props.value,
+            curto: fields.text({
+              label: "Título curto",
+              description: "Obrigatório. É o que aparece no diagrama — use poucas palavras.",
+              validation: OBRIGATORIO,
+            }),
+            id: fields.select({
+              label: "Ícone",
+              description: "Obrigatório.",
+              options: ICONES_RESPONSABILIDADES,
+              defaultValue: "negocio",
+            }),
+            resumo: fields.text({
+              label: "Resumo",
+              description: "Opcional. Frase exibida abaixo do título no diagrama.",
+              multiline: true,
             }),
           }),
           {
             label: "Etapas",
-            itemLabel: (props) => props.fields.titulo.value,
+            description: "A numeração (01, 02, …) é gerada sozinha, na ordem desta lista.",
+            itemLabel: (props) => props.fields.titulo.value || "(sem título)",
           },
         ),
       },
@@ -166,9 +272,17 @@ export default config({
       path: "content/contato",
       format: { data: "json" },
       schema: {
-        olho: fields.text({ label: "Olho" }),
-        titulo: fields.text({ label: "Título" }),
-        apoio: fields.text({ label: "Texto de apoio", multiline: true }),
+        titulo: fields.text({
+          label: "Título",
+          description: "Obrigatório.",
+          validation: OBRIGATORIO,
+        }),
+        olho: fields.text({ label: "Olho", description: "Opcional." }),
+        apoio: fields.text({
+          label: "Texto de apoio",
+          description: "Opcional.",
+          multiline: true,
+        }),
       },
     }),
 
@@ -178,15 +292,17 @@ export default config({
       format: { data: "json" },
       schema: {
         itens: fields.array(
-          fields.object({
-            id: fields.text({ label: "Identificador (sem espaços)" }),
-            descricao: fields.text({ label: "Descrição", multiline: true }),
+          fields.text({
+            label: "Impacto",
+            description: "Obrigatório.",
+            validation: OBRIGATORIO,
+            multiline: true,
           }),
           {
             label: "Itens",
             description:
-              "Usados em qualquer case que não tenha impactos próprios preenchidos.",
-            itemLabel: (props) => props.fields.descricao.value.slice(0, 60),
+              "Usados em qualquer case que não tenha impactos próprios preenchidos. Nunca transformar em números sem confirmação.",
+            itemLabel: (props) => props.value.slice(0, 60) || "(vazio)",
           },
         ),
       },
@@ -199,19 +315,32 @@ export default config({
       schema: {
         projetos: fields.array(
           fields.object({
-            nome: fields.text({ label: "Nome do projeto" }),
+            nome: fields.text({
+              label: "Nome do projeto",
+              description: "Obrigatório.",
+              validation: OBRIGATORIO,
+            }),
             slug: fields.text({
               label: "Slug (endereço)",
               description:
-                "Vira /projetos/SLUG. Só letras minúsculas e hífens. Trocar o slug quebra links antigos.",
+                "Obrigatório. Vira /projetos/SLUG. Só letras minúsculas, números e hífens. Trocar o slug quebra links antigos.",
+              validation: {
+                isRequired: true,
+                pattern: {
+                  regex: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+                  message: "Use só letras minúsculas, números e hífens. Ex.: dashboard-de-vendas",
+                },
+              },
             }),
             ordem: fields.integer({
               label: "Ordem",
-              description: "Menor aparece primeiro.",
+              description: "Obrigatório. Menor aparece primeiro.",
               defaultValue: 1,
+              validation: { isRequired: true, min: 0 },
             }),
             tipo: fields.select({
               label: "Aba",
+              description: "Em qual aba da seção Projetos este case aparece.",
               options: [
                 { label: "Profissional", value: "profissional" },
                 { label: "Pessoal", value: "pessoal" },
@@ -220,15 +349,16 @@ export default config({
             }),
             categoria: fields.text({
               label: "Categoria",
-              description: 'Ex.: "Comercial · Performance de vendas".',
+              description: 'Opcional. Ex.: "Comercial · Performance de vendas".',
             }),
             usuarios: fields.array(fields.text({ label: "Usuário" }), {
               label: "Quem usa",
-              itemLabel: (props) => props.value,
+              description: "Opcional.",
+              itemLabel: (props) => props.value || "(vazio)",
             }),
             resumo: fields.text({
               label: "Resumo",
-              description: "Aparece no card da home.",
+              description: "Opcional. Aparece no card da home.",
               multiline: true,
             }),
             avisoConfidencialidade: fields.checkbox({
@@ -236,43 +366,60 @@ export default config({
               defaultValue: true,
             }),
 
-            contexto: fields.text({ label: "01 · Contexto", multiline: true }),
-            problema: fields.text({ label: "02 · Problema", multiline: true }),
-            objetivo: fields.text({ label: "03 · Objetivo", multiline: true }),
-            abordagem: fields.text({ label: "04 · Abordagem", multiline: true }),
+            contexto: fields.text({ label: "Contexto", description: "Opcional.", multiline: true }),
+            problema: fields.text({ label: "Problema", description: "Opcional.", multiline: true }),
+            objetivo: fields.text({ label: "Objetivo", description: "Opcional.", multiline: true }),
+            abordagem: fields.text({
+              label: "Abordagem",
+              description: "Opcional.",
+              multiline: true,
+            }),
             dados: fields.text({
-              label: "05 · Origem dos dados",
-              description: "Deixe vazio se a fonte não puder ser informada.",
+              label: "Origem dos dados",
+              description: "Opcional. Deixe vazio se a fonte não puder ser informada.",
               multiline: true,
             }),
             tecnologias: fields.array(fields.text({ label: "Tecnologia" }), {
-              label: "05 · Tecnologias",
-              itemLabel: (props) => props.value,
+              label: "Tecnologias",
+              description: "Opcional.",
+              itemLabel: (props) => props.value || "(vazio)",
             }),
             kpis: fields.array(fields.text({ label: "KPI" }), {
-              label: "06 · KPIs e análises",
-              itemLabel: (props) => props.value,
+              label: "KPIs e análises",
+              description: "Opcional.",
+              itemLabel: (props) => props.value || "(vazio)",
             }),
-            uso: fields.text({ label: "07 · Uso", multiline: true }),
-            resultado: fields.text({ label: "08 · Resultado", multiline: true }),
-            aprendizado: fields.text({ label: "09 · Aprendizado", multiline: true }),
+            uso: fields.text({ label: "Uso", description: "Opcional.", multiline: true }),
+            resultado: fields.text({
+              label: "Resultado",
+              description: "Opcional.",
+              multiline: true,
+            }),
+            aprendizado: fields.text({
+              label: "Aprendizado",
+              description: "Opcional.",
+              multiline: true,
+            }),
 
             impacto: fields.array(
-              fields.object({
-                id: fields.text({ label: "Identificador (sem espaços)" }),
-                descricao: fields.text({ label: "Descrição", multiline: true }),
+              fields.text({
+                label: "Impacto",
+                description: "Obrigatório.",
+                validation: OBRIGATORIO,
+                multiline: true,
               }),
               {
                 label: "Impactos deste projeto",
-                description:
-                  "Se deixar vazio, o case usa a lista padrão de impactos.",
-                itemLabel: (props) => props.fields.descricao.value.slice(0, 60),
+                description: "Opcional. Vazio faz o case usar a lista padrão de impactos.",
+                itemLabel: (props) => props.value.slice(0, 60) || "(vazio)",
               },
             ),
           }),
           {
             label: "Projetos",
-            itemLabel: (props) => props.fields.nome.value,
+            description:
+              "A numeração dos blocos (01 Contexto, 02 Problema, …) é gerada sozinha: blocos vazios são omitidos e a contagem se ajusta.",
+            itemLabel: (props) => props.fields.nome.value || "(sem nome)",
           },
         ),
       },

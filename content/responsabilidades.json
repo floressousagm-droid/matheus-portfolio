@@ -1,112 +1,58 @@
 {
   "grupos": [
     {
-      "id": "negocio",
       "titulo": "Entendimento do negócio",
       "curto": "Entendimento",
-      "resumo": "Conversa com gestores e usuários para entender a dor da área e definir o que precisa ser respondido.",
-      "itens": [
-        "Conversa com gestores e usuários.",
-        "Entende a dor da área.",
-        "Define o que precisa ser respondido.",
-        "Identifica como os dados podem ajudar."
-      ]
+      "id": "negocio",
+      "resumo": "Conversa com gestores e usuários para entender a dor da área e definir o que precisa ser respondido."
     },
     {
-      "id": "dados",
       "titulo": "Dados",
       "curto": "Dados",
-      "resumo": "Busca dados em fontes como SQL e SAP Business One, usando views existentes e estruturas reutilizáveis.",
-      "itens": [
-        "Busca informações em fontes como SQL e SAP Business One.",
-        "Trabalha com dados estruturados.",
-        "Utiliza views existentes e também constrói estruturas reutilizáveis."
-      ]
+      "id": "dados",
+      "resumo": "Busca dados em fontes como SQL e SAP Business One, usando views existentes e estruturas reutilizáveis."
     },
     {
-      "id": "etl",
       "titulo": "ETL / ELT",
       "curto": "ETL / ELT",
-      "resumo": "Trata, padroniza e resolve problemas de qualidade nos dados antes da construção dos indicadores.",
-      "itens": [
-        "Trata e prepara os dados.",
-        "Padroniza informações.",
-        "Resolve problemas de qualidade e estrutura antes da construção dos indicadores."
-      ]
+      "id": "etl",
+      "resumo": "Trata, padroniza e resolve problemas de qualidade nos dados antes da construção dos indicadores."
     },
     {
-      "id": "modelagem",
       "titulo": "Modelagem",
       "curto": "Modelagem",
-      "resumo": "Estrutura modelos dimensionais com fatos e dimensões, definindo relacionamentos entre os dados.",
-      "itens": [
-        "Trabalha com fatos e dimensões.",
-        "Estrutura modelos dimensionais.",
-        "Define relacionamentos e organização dos dados."
-      ]
+      "id": "modelagem",
+      "resumo": "Estrutura modelos dimensionais com fatos e dimensões, definindo relacionamentos entre os dados."
     },
     {
-      "id": "metricas",
       "titulo": "Métricas e regras",
       "curto": "Métricas",
-      "resumo": "Define regras de negócio e cria medidas em DAX para estruturar KPIs e indicadores.",
-      "itens": [
-        "Define regras de negócio.",
-        "Cria medidas em DAX.",
-        "Desenvolve KPIs.",
-        "Estrutura indicadores de acordo com o problema que precisa ser respondido."
-      ]
+      "id": "metricas",
+      "resumo": "Define regras de negócio e cria medidas em DAX para estruturar KPIs e indicadores."
     },
     {
-      "id": "visualizacao",
       "titulo": "Visualização",
       "curto": "Visualização",
-      "resumo": "Organiza dashboards com storytelling e boas práticas, usando Figma para estruturar layouts.",
-      "itens": [
-        "Organiza informações de acordo com boas práticas.",
-        "Utiliza storytelling.",
-        "Utiliza Figma para estruturar layouts de dashboards.",
-        "Busca facilitar a interpretação e a tomada de decisão."
-      ]
+      "id": "visualizacao",
+      "resumo": "Organiza dashboards com storytelling e boas práticas, usando Figma para estruturar layouts."
     },
     {
-      "id": "validacao",
       "titulo": "Validação",
       "curto": "Validação",
-      "resumo": "Compara resultados com a origem, investiga divergências e revisa tudo antes da entrega.",
-      "itens": [
-        "Compara os resultados com o banco/origem.",
-        "Investiga divergências.",
-        "Verifica se os problemas vêm de modelagem, regras ou fonte.",
-        "Faz uma revisão completa antes da entrega."
-      ]
+      "id": "validacao",
+      "resumo": "Compara resultados com a origem, investiga divergências e revisa tudo antes da entrega."
     },
     {
-      "id": "publicacao",
       "titulo": "Publicação e sustentação",
       "curto": "Publicação",
-      "resumo": "Publica dashboards, gerencia workspace, configura atualizações e presta suporte contínuo.",
-      "itens": [
-        "Publica dashboards.",
-        "Gerencia workspace.",
-        "Configura atualizações.",
-        "Trabalha com RLS em determinados relatórios.",
-        "Presta suporte.",
-        "Corrige problemas.",
-        "Monitora os relatórios após a entrega."
-      ]
+      "id": "publicacao",
+      "resumo": "Publica dashboards, gerencia workspace, configura atualizações e presta suporte contínuo."
     },
     {
-      "id": "automacao",
       "titulo": "Automação",
       "curto": "Automação",
-      "resumo": "Automatiza rotinas e relatórios, usando IA para aumentar produtividade e acelerar tarefas.",
-      "itens": [
-        "Automatiza algumas rotinas.",
-        "Mantém relatórios com atualizações automatizadas.",
-        "Participa da geração de informações diárias para a diretoria.",
-        "Utiliza IA para aumentar produtividade e acelerar tarefas."
-      ]
+      "id": "automacao",
+      "resumo": "Automatiza rotinas e relatórios, usando IA para aumentar produtividade e acelerar tarefas."
     }
   ]
 }

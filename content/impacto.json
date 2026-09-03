@@ -1,28 +1,10 @@
 {
   "itens": [
-    {
-      "id": "tempo",
-      "descricao": "Redução do tempo necessário para encontrar informações."
-    },
-    {
-      "id": "acompanhamento",
-      "descricao": "Maior facilidade para acompanhamento diário."
-    },
-    {
-      "id": "centralizacao",
-      "descricao": "Centralização de informações."
-    },
-    {
-      "id": "disponibilidade",
-      "descricao": "Maior disponibilidade de dados para gestores."
-    },
-    {
-      "id": "manual",
-      "descricao": "Redução da necessidade de buscar informações manualmente."
-    },
-    {
-      "id": "agilidade",
-      "descricao": "Maior agilidade na análise."
-    }
+    "Redução do tempo necessário para encontrar informações.",
+    "Maior facilidade para acompanhamento diário.",
+    "Centralização de informações.",
+    "Maior disponibilidade de dados para gestores.",
+    "Redução da necessidade de buscar informações manualmente.",
+    "Maior agilidade na análise."
   ]
 }

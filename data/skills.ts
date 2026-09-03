@@ -1,10 +1,15 @@
 import type { SkillGroup } from "@/lib/types";
 
-import habilidadesJson from "@/content/habilidades.json";
+import habilidadesRaw from "@/content/habilidades.json";
+import type { ConteudoHabilidades } from "@/lib/content-schema";
+
+const habilidadesJson = habilidadesRaw as ConteudoHabilidades;
 
 /** Conteúdo em `content/habilidades.json`, editável pelo painel em `/keystatic`. */
-export const skillGroups: SkillGroup[] = habilidadesJson.grupos.map((grupo) => ({
-  id: grupo.id,
-  title: grupo.titulo,
-  skills: grupo.habilidades,
-}));
+export const skillGroups: SkillGroup[] = (habilidadesJson.grupos ?? [])
+  .filter((grupo) => (grupo.titulo ?? "").trim())
+  .map((grupo) => ({
+    id: (grupo.id ?? "").trim() || "complementares",
+    title: (grupo.titulo ?? "").trim(),
+    skills: (grupo.habilidades ?? []).map((s) => (s ?? "").trim()).filter(Boolean),
+  }));

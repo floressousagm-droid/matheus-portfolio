@@ -1,13 +1,17 @@
-import { BarChart3, Database, Layers, type LucideIcon } from "lucide-react";
+import { BarChart3, Cloud, Code, Database, Layers, Wrench, type LucideIcon } from "lucide-react";
 
 import { Reveal } from "@/components/data-visuals/reveal";
 import { SectionHeading } from "@/components/data-visuals/section-heading";
 import { skillGroups } from "@/data/skills";
 
+// As chaves batem com as opções de "Ícone" em keystatic.config.ts.
 const groupIcons: Record<string, LucideIcon> = {
   linguagens: Database,
   visualizacao: BarChart3,
   complementares: Layers,
+  codigo: Code,
+  nuvem: Cloud,
+  ferramentas: Wrench,
 };
 
 export function Skills() {

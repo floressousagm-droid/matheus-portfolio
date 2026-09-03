@@ -19,6 +19,7 @@ export function About() {
               ))}
             </div>
 
+            {about.stats.length > 0 ? (
             <dl className="mt-12 grid grid-cols-2 gap-6 border-t border-(--color-surface-border) pt-8 sm:grid-cols-3">
               {about.stats.map((stat, index) => (
                 <Reveal key={stat.id} delay={0.1 + index * 0.05}>
@@ -27,6 +28,7 @@ export function About() {
                 </Reveal>
               ))}
             </dl>
+            ) : null}
           </div>
 
           <div>

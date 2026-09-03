@@ -1,13 +1,22 @@
 import type { ImpactItem, Project, ProjectKind } from "@/lib/types";
 
-import projetosJson from "@/content/projetos.json";
+import projetosRaw from "@/content/projetos.json";
+import type { ConteudoProjetos } from "@/lib/content-schema";
+
+// Ver lib/content-schema.ts: o cast mantém o tipo estável mesmo quando o
+// Keystatic remove chaves de campos esvaziados no painel.
+const projetosJson = projetosRaw as ConteudoProjetos;
 
 /**
  * Projetos exibidos no portfólio.
  *
  * O conteúdo vive em `content/projetos.json`, editável pelo painel em
- * `/keystatic` (adicionar, editar, reordenar e remover cases). Este arquivo
- * traduz o JSON para o tipo `Project` usado pelos componentes.
+ * `/keystatic` (adicionar, editar, reordenar e remover cases).
+ *
+ * Todo acesso é defensivo: quando um campo de texto fica vazio no painel, o
+ * Keystatic **remove a chave inteira** do JSON em vez de gravar `""`. Além
+ * disso, um case recém-adicionado e ainda não preenchido não pode derrubar o
+ * site — daí os filtros abaixo.
  *
  * Regras que continuam valendo (o painel não as impõe sozinho):
  * - Nunca incluir dados sensíveis, valores financeiros internos, clientes
@@ -17,44 +26,59 @@ import projetosJson from "@/content/projetos.json";
  *   simplesmente não exibe mockup até que alguém escreva o dele.
  */
 
-function normalizarTipo(valor: string): ProjectKind {
+/** Normaliza um campo de texto que pode estar vazio ou ausente. */
+function texto(valor: string | null | undefined): string {
+  return (valor ?? "").trim();
+}
+
+function normalizarTipo(valor: string | null | undefined): ProjectKind {
   return valor === "pessoal" ? "pessoal" : "profissional";
 }
 
 function normalizarImpacto(
-  itens: { id: string; descricao: string }[],
+  itens: (string | null | undefined)[] | null | undefined,
 ): ImpactItem[] | undefined {
+  const descricoes = (itens ?? []).map(texto).filter(Boolean);
   // Lista vazia no painel significa "usar os impactos transversais".
-  if (itens.length === 0) return undefined;
-  return itens.map((item) => ({ id: item.id, description: item.descricao }));
+  if (descricoes.length === 0) return undefined;
+  return descricoes.map((description, index) => ({
+    id: `impacto-${index}`,
+    description,
+  }));
 }
 
-// Um "Add" no painel que ainda não foi preenchido não tem slug — filtrar
-// aqui evita que um rascunho salvo por engano derrube o site inteiro.
-const projetosPublicaveis = projetosJson.projetos.filter(
-  (projeto): projeto is typeof projeto & { slug: string } => Boolean(projeto.slug?.trim()),
-);
+const vistos = new Set<string>();
 
-export const projects: Project[] = projetosPublicaveis.map((projeto) => ({
-  slug: projeto.slug,
-  order: projeto.ordem,
+const publicaveis = (projetosJson.projetos ?? []).filter((projeto) => {
+  const slug = texto(projeto.slug);
+  // Um "Add" no painel ainda não preenchido não tem slug nem nome; ignorar
+  // aqui evita que um rascunho salvo por engano derrube o site.
+  if (!slug || !texto(projeto.nome)) return false;
+  // Slug duplicado quebraria o build (duas rotas iguais) — fica o primeiro.
+  if (vistos.has(slug)) return false;
+  vistos.add(slug);
+  return true;
+});
+
+export const projects: Project[] = publicaveis.map((projeto) => ({
+  slug: texto(projeto.slug),
+  order: typeof projeto.ordem === "number" ? projeto.ordem : 0,
   kind: normalizarTipo(projeto.tipo),
-  name: projeto.nome,
-  category: projeto.categoria,
-  users: projeto.usuarios,
-  summary: projeto.resumo,
-  context: projeto.contexto,
-  problem: projeto.problema,
-  objective: projeto.objetivo,
-  approach: projeto.abordagem,
-  // Campo vazio no painel significa "fonte não declarada". Texto vazio faz
-  // o Keystatic omitir a própria chave do JSON — daí o `?.`.
-  data: projeto.dados?.trim() || undefined,
-  technologies: projeto.tecnologias,
-  kpis: projeto.kpis,
-  usage: projeto.uso,
-  result: projeto.resultado,
-  learning: projeto.aprendizado,
+  name: texto(projeto.nome),
+  category: texto(projeto.categoria),
+  users: (projeto.usuarios ?? []).map(texto).filter(Boolean),
+  summary: texto(projeto.resumo),
+  context: texto(projeto.contexto),
+  problem: texto(projeto.problema),
+  objective: texto(projeto.objetivo),
+  approach: texto(projeto.abordagem),
+  // Campo vazio no painel significa "fonte não declarada".
+  data: texto(projeto.dados) || undefined,
+  technologies: (projeto.tecnologias ?? []).map(texto).filter(Boolean),
+  kpis: (projeto.kpis ?? []).map(texto).filter(Boolean),
+  usage: texto(projeto.uso),
+  result: texto(projeto.resultado),
+  learning: texto(projeto.aprendizado),
   status: projeto.avisoConfidencialidade ? "confidencial-parcial" : undefined,
   impact: normalizarImpacto(projeto.impacto),
 }));

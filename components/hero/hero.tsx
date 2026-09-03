@@ -17,11 +17,13 @@ export function Hero() {
     >
       <div className="mx-auto grid w-full max-w-6xl gap-16 px-6 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-12">
         <div>
-          <Reveal>
-            <p className="text-lg font-medium text-(--color-ink-0) sm:text-xl">
-              {hero.greeting}
-            </p>
-          </Reveal>
+          {hero.greeting ? (
+            <Reveal>
+              <p className="text-lg font-medium text-(--color-ink-0) sm:text-xl">
+                {hero.greeting}
+              </p>
+            </Reveal>
+          ) : null}
           <Reveal delay={0.05}>
             <h1 className="mt-2 text-5xl font-semibold text-(--color-ink-0) sm:text-6xl">
               {hero.firstName}{" "}
@@ -52,11 +54,13 @@ export function Hero() {
             </p>
           </Reveal>
 
-          <Reveal delay={0.3}>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-(--color-ink-2)">
-              {hero.subtext}
-            </p>
-          </Reveal>
+          {hero.subtext ? (
+            <Reveal delay={0.3}>
+              <p className="mt-6 max-w-xl text-base leading-relaxed text-(--color-ink-2)">
+                {hero.subtext}
+              </p>
+            </Reveal>
+          ) : null}
 
           <Reveal delay={0.4}>
             <div className="mt-10 flex flex-wrap items-center gap-6">

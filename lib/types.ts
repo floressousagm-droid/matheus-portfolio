@@ -22,9 +22,9 @@ export type TimelineMarker = {
 };
 
 export type ResponsibilityGroup = {
+  /** Chave do ícone. Ver `icons` em components/responsibilities/. */
   id: string;
   title: string;
-  items: string[];
   short: string;
   summary: string;
 };

@@ -83,26 +83,11 @@
       "resultado": "O dashboard se tornou a principal ferramenta de leitura das despesas, reduzindo o tempo entre \"ver o número\" e \"entender o que ele significa\" para a tomada de decisão.",
       "aprendizado": "Ganho de experiência em modelagem DAX avançada (Pareto, forecast, tratamento de contexto de filtro), construção de componentes visuais customizados dentro de um dashboard de BI, e em um processo de trabalho auditável e sem suposições de regra de negócio.",
       "impacto": [
-        {
-          "id": "interpretacao",
-          "descricao": "Redução do tempo necessário para interpretar as despesas do período."
-        },
-        {
-          "id": "concentracao",
-          "descricao": "Maior clareza sobre concentração e composição dos gastos."
-        },
-        {
-          "id": "centralizacao",
-          "descricao": "Centralização de informações antes dispersas."
-        },
-        {
-          "id": "desvios",
-          "descricao": "Identificação mais rápida de pontos de atenção e desvios."
-        },
-        {
-          "id": "planilhas",
-          "descricao": "Redução da dependência de análise manual em planilhas."
-        }
+        "Redução do tempo necessário para interpretar as despesas do período.",
+        "Maior clareza sobre concentração e composição dos gastos.",
+        "Centralização de informações antes dispersas.",
+        "Identificação mais rápida de pontos de atenção e desvios.",
+        "Redução da dependência de análise manual em planilhas."
       ]
     },
     {
@@ -144,26 +129,11 @@
       "resultado": "O dashboard se tornou a referência para avaliar se o preço pago pelo aço está alinhado ao mercado, reduzindo a dependência de análise manual e dando à diretoria uma base objetiva — mercado + histórico + variabilidade — para decisões de compra e negociação.",
       "aprendizado": "Aprofundamento em auditoria de qualidade de dados aplicada a modelos DAX e em construção de componentes visuais customizados (HTML/CSS em DAX) para uso dentro do próprio Power BI.",
       "impacto": [
-        {
-          "id": "leitura-preco",
-          "descricao": "Redução do tempo entre \"ver o preço\" e \"entender se ele está caro ou normal\"."
-        },
-        {
-          "id": "confiabilidade",
-          "descricao": "Maior confiabilidade dos números após a auditoria e correção de bugs de ranking e ancoragem temporal."
-        },
-        {
-          "id": "qualidade-dados",
-          "descricao": "Identificação de achados de qualidade de dados antes invisíveis (fornecedores órfãos, lançamentos com valor zero)."
-        },
-        {
-          "id": "decisao",
-          "descricao": "Base objetiva e documentada para decisões de compra e negociação."
-        },
-        {
-          "id": "medidas-unicas",
-          "descricao": "Centralização da lógica de negócio em medidas DAX únicas, sem duplicidade entre dashboards."
-        }
+        "Redução do tempo entre \"ver o preço\" e \"entender se ele está caro ou normal\".",
+        "Maior confiabilidade dos números após a auditoria e correção de bugs de ranking e ancoragem temporal.",
+        "Identificação de achados de qualidade de dados antes invisíveis (fornecedores órfãos, lançamentos com valor zero).",
+        "Base objetiva e documentada para decisões de compra e negociação.",
+        "Centralização da lógica de negócio em medidas DAX únicas, sem duplicidade entre dashboards."
       ]
     },
     {
@@ -198,18 +168,9 @@
       "resultado": "Um painel simples, de leitura rápida e consistente, que se tornou referência diária para o acompanhamento das metas comerciais, sem exigir interpretação ou análise adicional da equipe.",
       "aprendizado": "Aplicação de princípios de design para dashboards de exibição em TV (simplicidade, hierarquia visual e leitura à distância) e consolidação de lógica de negócio em medidas DAX únicas e padronizadas.",
       "impacto": [
-        {
-          "id": "acompanhamento-visual",
-          "descricao": "Acompanhamento mais rápido e visual do progresso das metas pela equipe comercial."
-        },
-        {
-          "id": "ruido",
-          "descricao": "Redução de ruído visual, com destaque apenas para pontos que exigem atenção."
-        },
-        {
-          "id": "padronizacao",
-          "descricao": "Padronização das medidas de meta e faturamento, evitando duplicidade entre indicadores."
-        }
+        "Acompanhamento mais rápido e visual do progresso das metas pela equipe comercial.",
+        "Redução de ruído visual, com destaque apenas para pontos que exigem atenção.",
+        "Padronização das medidas de meta e faturamento, evitando duplicidade entre indicadores."
       ]
     }
   ]

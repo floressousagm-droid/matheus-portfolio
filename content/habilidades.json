@@ -1,8 +1,8 @@
 {
   "grupos": [
     {
-      "id": "linguagens",
       "titulo": "Linguagens e Banco de dados",
+      "id": "linguagens",
       "habilidades": [
         "Python para análise de dados",
         "SQL para extração de dados",
@@ -11,8 +11,8 @@
       ]
     },
     {
-      "id": "visualizacao",
       "titulo": "Visualização de dados e BI",
+      "id": "visualizacao",
       "habilidades": [
         "Power BI",
         "DAX",
@@ -23,8 +23,8 @@
       ]
     },
     {
-      "id": "complementares",
       "titulo": "Tecnologias Complementares",
+      "id": "complementares",
       "habilidades": [
         "Excel",
         "SharePoint",

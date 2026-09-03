@@ -27,11 +27,15 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
           />
         </div>
 
-        <p className="mt-4 text-xs tracking-wide text-(--color-accent-300) uppercase">
-          {project.category}
-        </p>
+        {project.category ? (
+          <p className="mt-4 text-xs tracking-wide text-(--color-accent-300) uppercase">
+            {project.category}
+          </p>
+        ) : null}
         <h3 className="mt-2 text-xl font-semibold text-(--color-ink-0)">{project.name}</h3>
-        <p className="mt-3 text-sm leading-relaxed text-(--color-ink-2)">{project.summary}</p>
+        {project.summary ? (
+          <p className="mt-3 text-sm leading-relaxed text-(--color-ink-2)">{project.summary}</p>
+        ) : null}
 
         <div className="mt-5 flex flex-wrap gap-2">
           {project.technologies.slice(0, 4).map((tech) => (

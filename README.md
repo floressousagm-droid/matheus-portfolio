@@ -103,6 +103,31 @@ republica sozinha em ~1 minuto. Configuração, uma única vez:
 > = grava via GitHub. Por isso o painel funciona local sem nenhuma configuração, e em
 > produção sem trocar código.
 
+### Campos obrigatórios e opcionais
+
+Campos obrigatórios aparecem com um **asterisco vermelho** e a descrição começa
+com "Obrigatório." — o painel recusa o "Save" se estiverem vazios. São poucos, e
+só onde a ausência quebraria algo:
+
+| Área | Obrigatório | Por quê |
+| --- | --- | --- |
+| Identidade | Nome, Cargo, E-mail | O e-mail é o destino do formulário de contato |
+| Hero | Primeiro nome | É o título principal da página |
+| Sobre / Contato | Título da seção | Sem ele a seção fica sem cabeçalho |
+| Projetos | Nome, Slug, Ordem | O slug é o endereço da página; a ordem define a posição |
+| Grupos (habilidades / etapas) | Título e Ícone | Sem título não há o que rotular |
+
+**Todo o resto é opcional, e vazio simplesmente some da página** — não fica um
+título solto com nada embaixo. Num case, os blocos são renumerados sozinhos:
+se você deixar "Objetivo" em branco, a numeração segue 01, 02, 03… sem buraco.
+
+Um projeto adicionado mas ainda não preenchido (sem slug) é ignorado pelo site
+até você completá-lo, então um rascunho salvo por engano não derruba nada.
+
+> A mensagem de erro de campo vazio aparece em inglês ("… must not be empty").
+> É um texto fixo dentro do Keystatic, não traduzível pela configuração; o resto
+> do painel está em português.
+
 ### O que o painel NÃO edita (de propósito)
 
 - **O menu** (`data/nav.ts`): os ids precisam bater com os ids das seções na página.
