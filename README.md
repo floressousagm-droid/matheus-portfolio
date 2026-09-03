@@ -70,23 +70,33 @@ em `content/`, e o site recarrega na hora. Depois é só commitar e dar push.
 ### Editando de qualquer lugar (produção)
 
 Em produção o painel grava via GitHub: cada "Save" vira um commit, e a Vercel
-republica sozinha em ~1 minuto. Configuração, uma única vez:
+republica sozinha em ~1 minuto.
 
-1. **Suba o repositório para o GitHub.** O projeto já está inicializado com git:
+> **A ordem importa.** O assistente de setup do Keystatic **só funciona em
+> desenvolvimento** — em produção ele lança erro de propósito. Então o GitHub App
+> é criado **na sua máquina**, e as chaves são copiadas para a Vercel depois.
+> Rodar na ordem errada não é só inconveniente: até as variáveis existirem, o
+> painel fica desligado (404) — que é o comportamento seguro, mas não o que você
+> quer.
+
+1. **Suba o repositório para o GitHub** (já feito, se você clonou daqui):
 
    ```bash
    git remote add origin https://github.com/SEU-USUARIO/SEU-REPO.git
-   git push -u origin main
+   git push -u origin master
    ```
 
-2. **Faça o deploy na Vercel**, importando esse repositório.
+2. **Crie o GitHub App localmente.** Coloque o repo no seu `.env.local`:
 
-3. **Crie o GitHub App.** Com o site já no ar, acesse
-   `https://SEU-SITE.vercel.app/keystatic/setup` — o próprio Keystatic conduz a
-   criação do app e mostra as chaves ao final.
+   ```bash
+   NEXT_PUBLIC_GITHUB_REPO=seu-usuario/seu-repo
+   ```
 
-4. **Configure as variáveis na Vercel** (Settings → Environment Variables), usando os
-   valores que a tela anterior mostrou:
+   Rode `npm run dev` e acesse <http://localhost:3000/keystatic/setup>. O
+   Keystatic conduz a criação do app e grava as chaves no seu `.env.local`.
+
+3. **Configure as variáveis na Vercel** (Settings → Environment Variables),
+   copiando os valores do `.env.local` gerado no passo anterior.
 
    | Variável | O que é |
    | --- | --- |
@@ -96,12 +106,25 @@ republica sozinha em ~1 minuto. Configuração, uma única vez:
    | `KEYSTATIC_GITHUB_CLIENT_SECRET` | do app |
    | `KEYSTATIC_SECRET` | segredo aleatório gerado pelo setup |
 
-5. **Refaça o deploy.** A partir daí, `SEU-SITE.vercel.app/keystatic` pede login do
-   GitHub — só quem tem acesso ao repositório consegue editar.
+   > Marque as variáveis para **todos** os ambientes (Production, Preview e
+   > Development). `NEXT_PUBLIC_*` é embutido em *build time*: se ficar só em
+   > Production, os deploys de Preview saem sem painel.
 
-> `NEXT_PUBLIC_GITHUB_REPO` é o que decide o modo: **vazia = grava local**, preenchida
-> = grava via GitHub. Por isso o painel funciona local sem nenhuma configuração, e em
-> produção sem trocar código.
+4. **Faça o deploy na Vercel**, importando o repositório.
+
+5. Acesse `SEU-SITE.vercel.app/keystatic`. Ele pede login do GitHub — só quem tem
+   acesso ao repositório consegue editar.
+
+### Por que o painel some quando não está configurado
+
+Se `NEXT_PUBLIC_GITHUB_REPO` não estiver definida em produção, `/keystatic` e
+`/api/keystatic/*` respondem **404**, e o resto do site funciona normalmente.
+
+Isso é deliberado. Sem essa variável, o Keystatic cairia para o modo de
+armazenamento "local", que **grava sem autenticação nenhuma** — deixaria
+`POST /api/keystatic/update` aberto para qualquer visitante. Na Vercel a escrita
+falharia (o disco é somente leitura), mas em qualquer host com disco gravável
+seria controle total do conteúdo. Melhor o painel sumir do que ficar aberto.
 
 ### Campos obrigatórios e opcionais
 

@@ -18,7 +18,55 @@ function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
+// Limites de tamanho: sem eles, o endpoint aceita um corpo de vários MB por
+// requisição. Generosos para uso real, apertados para abuso.
+const LIMITES = { nome: 100, email: 200, mensagem: 5000 } as const;
+
+// Rate limit por IP, em memória.
+//
+// Ressalva honesta: em serverless a memória é por instância, então isso não é
+// uma barreira forte — instâncias novas começam com o contador zerado. Ainda
+// assim corta o caso real (um script em loop reusa a mesma instância quente) e
+// não exige serviço externo. Se o formulário virar alvo de verdade, trocar por
+// um contador compartilhado (Vercel KV / Upstash).
+const JANELA_MS = 10 * 60 * 1000;
+const MAX_POR_JANELA = 5;
+const envios = new Map<string, number[]>();
+
+function excedeuLimite(ip: string): boolean {
+  const agora = Date.now();
+  const recentes = (envios.get(ip) ?? []).filter((t) => agora - t < JANELA_MS);
+
+  if (recentes.length >= MAX_POR_JANELA) {
+    envios.set(ip, recentes);
+    return true;
+  }
+
+  recentes.push(agora);
+  envios.set(ip, recentes);
+
+  // Impede o Map de crescer sem limite na instância.
+  if (envios.size > 1000) {
+    for (const [chave, marcas] of envios) {
+      if (marcas.every((t) => agora - t >= JANELA_MS)) envios.delete(chave);
+    }
+  }
+  return false;
+}
+
 export async function POST(request: Request) {
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip") ||
+    "desconhecido";
+
+  if (excedeuLimite(ip)) {
+    return NextResponse.json(
+      { error: "Muitas mensagens em pouco tempo. Tente novamente mais tarde." },
+      { status: 429 },
+    );
+  }
+
   let body: unknown;
   try {
     body = await request.json();
@@ -37,10 +85,13 @@ export async function POST(request: Request) {
   if (
     typeof name !== "string" ||
     name.trim().length < 2 ||
+    name.length > LIMITES.nome ||
     typeof email !== "string" ||
     !isValidEmail(email) ||
+    email.length > LIMITES.email ||
     typeof message !== "string" ||
-    message.trim().length < 10
+    message.trim().length < 10 ||
+    message.length > LIMITES.mensagem
   ) {
     return NextResponse.json(
       { error: "Preencha nome, e-mail e mensagem corretamente." },

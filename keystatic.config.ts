@@ -24,6 +24,18 @@ import { config, fields, singleton } from "@keystatic/core";
 
 const GITHUB_REPO = process.env.NEXT_PUBLIC_GITHUB_REPO;
 
+/**
+ * O modo "local" grava sem autenticação nenhuma — correto em desenvolvimento,
+ * inaceitável em produção (deixaria `POST /api/keystatic/update` aberto).
+ * Por isso a escolha abaixo falha FECHADO: em produção sem repo configurado,
+ * não cai para local; o painel é desligado nas rotas (ver app/keystatic/ e
+ * app/api/keystatic/). Atenção: `NEXT_PUBLIC_*` é embutido em build time, então
+ * a variável precisa existir em TODOS os ambientes da Vercel — inclusive
+ * Preview — e não só em Production.
+ */
+const EM_PRODUCAO = process.env.NODE_ENV === "production";
+const USAR_LOCAL = !EM_PRODUCAO && !GITHUB_REPO;
+
 const OBRIGATORIO = { isRequired: true } as const;
 
 /** Ícones disponíveis para os grupos de habilidades (ver `components/skills/skills.tsx`). */
@@ -52,9 +64,9 @@ const ICONES_RESPONSABILIDADES = [
 export default config({
   // Em produção grava via GitHub (vira commit + republicação na Vercel);
   // em desenvolvimento grava direto nos arquivos locais.
-  storage: GITHUB_REPO
-    ? { kind: "github", repo: GITHUB_REPO as `${string}/${string}` }
-    : { kind: "local" },
+  storage: USAR_LOCAL
+    ? { kind: "local" }
+    : { kind: "github", repo: (GITHUB_REPO ?? "repo/nao-configurado") as `${string}/${string}` },
 
   locale: "pt-BR",
 
@@ -93,11 +105,11 @@ export default config({
           label: "Localização",
           description: "Opcional. Vazio esconde a linha.",
         }),
-        linkedin: fields.text({
+        linkedin: fields.url({
           label: "LinkedIn (URL)",
           description: "Opcional. Vazio esconde o link.",
         }),
-        github: fields.text({
+        github: fields.url({
           label: "GitHub (URL)",
           description: "Opcional. Vazio esconde o link.",
         }),

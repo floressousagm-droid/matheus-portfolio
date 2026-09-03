@@ -34,14 +34,29 @@ function texto(valor: string | null | undefined): string {
   return (valor ?? "").trim();
 }
 
+/**
+ * Só deixa passar http/https. React não sanitiza `href`, então um valor como
+ * `javascript:...` viraria XSS armazenado se o painel fosse comprometido.
+ */
+function urlSegura(valor: string | null | undefined): string | null {
+  const bruto = texto(valor);
+  if (!bruto) return null;
+  try {
+    const url = new URL(bruto);
+    return url.protocol === "http:" || url.protocol === "https:" ? bruto : null;
+  } catch {
+    return null;
+  }
+}
+
 export const identity = {
   name: texto(identidadeJson.nome),
   role: texto(identidadeJson.cargo),
   location: texto(identidadeJson.localizacao),
   email: texto(identidadeJson.email),
   // Vazio no painel significa "não exibir o link".
-  linkedin: (texto(identidadeJson.linkedin) || null) as string | null,
-  github: (texto(identidadeJson.github) || null) as string | null,
+  linkedin: urlSegura(identidadeJson.linkedin),
+  github: urlSegura(identidadeJson.github),
 };
 
 export const hero = {
