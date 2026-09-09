@@ -27,6 +27,12 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
   },
+  // O Next 16, em dev, só confia em "localhost" por padrão — qualquer outra
+  // origem tem os assets bloqueados com 403 (proteção contra sites maliciosos
+  // sondando o dev server). O fluxo de setup do Keystatic exige "127.0.0.1"
+  // (boa prática de OAuth), então precisa entrar aqui explicitamente, senão o
+  // React nunca hidrata e formulários caem no submit nativo do navegador.
+  allowedDevOrigins: ["127.0.0.1"],
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
