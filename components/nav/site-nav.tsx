@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, X } from "lucide-react";
 
+import { LinkInicio } from "@/components/nav/link-inicio";
 import { useProjectsTab } from "@/components/projects/projects-tab-context";
 import { navItems } from "@/data/nav";
 import type { NavChild, NavItem } from "@/lib/types";
@@ -94,20 +95,9 @@ export function SiteNav() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-(--color-surface-border) bg-(--color-surface-0)/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <Link
-          href="/"
-          onClick={(event) => {
-            // Clicar na logo já na home não navega (é a mesma rota), então o
-            // Next não reseta o scroll. Rola manualmente pro topo nesse caso.
-            if (isHome) {
-              event.preventDefault();
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }
-          }}
-          className="text-sm font-semibold text-(--color-ink-0)"
-        >
+        <LinkInicio className="text-sm font-semibold text-(--color-ink-0)">
           {identity.name}
-        </Link>
+        </LinkInicio>
 
         <nav aria-label="Navegação principal" className="hidden items-center gap-1 md:flex">
           {navItems.map((item: NavItem) => {

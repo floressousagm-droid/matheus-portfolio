@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Mail } from "lucide-react";
 
+import { LinkInicio } from "@/components/nav/link-inicio";
 import { Github, Linkedin } from "@/components/ui/brand-icons";
 
 import { getSortedProjects } from "@/data/projects";
@@ -30,9 +31,9 @@ export function SiteFooter() {
       <div className="mx-auto max-w-6xl px-6 py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <Link href="/" className="text-base font-semibold text-(--color-ink-0)">
+            <LinkInicio className="text-base font-semibold text-(--color-ink-0)">
               {identity.name}
-            </Link>
+            </LinkInicio>
             <p className="mt-2 text-sm text-(--color-ink-2)">{identity.role}</p>
             <p className="mt-4 text-xs text-(--color-ink-3)">{identity.location}</p>
           </div>
