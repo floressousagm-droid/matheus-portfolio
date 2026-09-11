@@ -4,7 +4,6 @@ import { Github, Linkedin } from "@/components/ui/brand-icons";
 
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/data-visuals/reveal";
-import { ContactForm } from "@/components/contact/contact-form";
 import { contact, identity } from "@/data/site";
 
 export function Contact() {
@@ -48,10 +47,6 @@ export function Contact() {
               </Button>
             ) : null}
           </div>
-        </Reveal>
-
-        <Reveal delay={0.15}>
-          <ContactForm />
         </Reveal>
 
         <Reveal delay={0.2}>
