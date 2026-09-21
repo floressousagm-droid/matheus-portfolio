@@ -36,23 +36,25 @@ export function Hero() {
             <p className="mt-3 text-lg font-medium text-(--color-accent-300)">{hero.role}</p>
           </Reveal>
 
-          <Reveal delay={0.2}>
-            <p className="mt-8 max-w-xl text-2xl leading-snug font-medium text-(--color-ink-0) sm:text-3xl">
-              {hero.headline.map((line) => {
-                const words = line.split(" ");
-                const lastWord = words.pop();
-                const rest = words.join(" ");
-                return (
-                  <span key={line} className="block">
-                    {rest ? `${rest} ` : null}
-                    <span className="bg-gradient-to-r from-(--color-accent-300) via-(--color-accent-500) to-(--color-accent-600) bg-clip-text text-transparent">
-                      {lastWord}
+          {hero.headline.length > 0 ? (
+            <Reveal delay={0.2}>
+              <p className="mt-8 max-w-xl text-2xl leading-snug font-medium text-(--color-ink-0) sm:text-3xl">
+                {hero.headline.map((line) => {
+                  const words = line.split(" ");
+                  const lastWord = words.pop();
+                  const rest = words.join(" ");
+                  return (
+                    <span key={line} className="block">
+                      {rest ? `${rest} ` : null}
+                      <span className="bg-gradient-to-r from-(--color-accent-300) via-(--color-accent-500) to-(--color-accent-600) bg-clip-text text-transparent">
+                        {lastWord}
+                      </span>
                     </span>
-                  </span>
-                );
-              })}
-            </p>
-          </Reveal>
+                  );
+                })}
+              </p>
+            </Reveal>
+          ) : null}
 
           {hero.subtext ? (
             <Reveal delay={0.3}>

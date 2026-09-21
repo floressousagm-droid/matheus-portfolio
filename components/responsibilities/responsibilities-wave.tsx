@@ -152,7 +152,7 @@ export function ResponsibilitiesWave({ groups }: ResponsibilitiesWaveProps) {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: node.index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                className="flex size-14 items-center justify-center rounded-full border border-(--color-accent-500)/40 bg-(--color-surface-2) text-(--color-accent-300) shadow-[0_0_0_6px_var(--color-surface-1)]"
+                className="flex size-14 items-center justify-center rounded-full border border-(--color-accent-500)/30 bg-(--color-surface-2) text-(--color-accent-300) shadow-[0_0_0_6px_var(--color-surface-1)]"
               >
                 <Icon className="size-5" aria-hidden />
               </motion.div>
@@ -176,7 +176,6 @@ export function ResponsibilitiesWave({ groups }: ResponsibilitiesWaveProps) {
               {node.number}
             </span>
             <h3 className="mt-1 text-sm font-semibold text-(--color-ink-0)">{node.group.short}</h3>
-            <p className="mt-1 text-xs leading-relaxed text-(--color-ink-2)">{node.group.summary}</p>
           </div>
         ))}
       </div>

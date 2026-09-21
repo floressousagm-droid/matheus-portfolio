@@ -72,6 +72,7 @@ export const hero = {
 export const about = {
   eyebrow: texto(sobreJson.olho),
   heading: texto(sobreJson.titulo),
+  photo: texto(sobreJson.foto) || undefined,
   paragraphs: (sobreJson.paragrafos ?? []).map(texto).filter(Boolean),
   stats: (sobreJson.numeros ?? [])
     .filter((numero) => texto(numero.rotulo) && texto(numero.valor))

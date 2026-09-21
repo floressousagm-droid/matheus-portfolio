@@ -162,6 +162,12 @@ export default config({
           label: "Olho (texto pequeno acima do título)",
           description: "Opcional. Vazio esconde a linha.",
         }),
+        foto: fields.image({
+          label: "Foto",
+          description: "Opcional. Aparece ao lado do texto na seção Sobre mim.",
+          directory: "public/images/sobre",
+          publicPath: "/images/sobre/",
+        }),
         paragrafos: fields.array(fields.text({ label: "Parágrafo", multiline: true }), {
           label: "Parágrafos",
           description: "Opcional.",
@@ -362,6 +368,12 @@ export default config({
             categoria: fields.text({
               label: "Categoria",
               description: 'Opcional. Ex.: "Comercial · Performance de vendas".',
+            }),
+            capaImagem: fields.image({
+              label: "Imagem de capa (card)",
+              description: "Opcional. Aparece no topo do card na home.",
+              directory: "public/images/projetos",
+              publicPath: "/images/projetos/",
             }),
             usuarios: fields.array(fields.text({ label: "Usuário" }), {
               label: "Quem usa",

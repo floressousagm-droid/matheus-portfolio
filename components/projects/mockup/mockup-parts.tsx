@@ -52,7 +52,7 @@ export function Panel({
       <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1.5">
         <div className="flex min-w-0 items-center gap-2">
           {icon ? (
-            <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-(--color-accent-500)/15 text-(--color-accent-300)">
+            <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-(--color-accent-500)/10 text-(--color-accent-300)">
               {icon}
             </span>
           ) : null}
@@ -113,7 +113,7 @@ export function KpiCard({
       <div className="flex items-start justify-between gap-2">
         <p className="text-xs font-medium text-(--color-ink-2)">{label}</p>
         {icon ? (
-          <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-(--color-accent-500)/15 text-(--color-accent-300)">
+          <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-(--color-accent-500)/10 text-(--color-accent-300)">
             {icon}
           </span>
         ) : null}

@@ -49,7 +49,7 @@ function KpiDespesa({
     <div
       className={cn(
         "rounded-xl border border-(--color-surface-border) bg-(--color-surface-2) p-4",
-        highlight && "border-l-2 border-l-(--color-accent-500) bg-(--color-accent-500)/5",
+        highlight && "border-l-2 border-l-(--color-accent-500) bg-(--color-accent-500)/10",
       )}
     >
       <div className="flex flex-wrap items-start justify-between gap-x-2 gap-y-1">

@@ -49,7 +49,7 @@ export function ResponsibilitiesTimeline({ groups }: ResponsibilitiesTimelinePro
 
           return (
             <Reveal key={group.id} as="li" delay={(index % 4) * 0.06} className="relative flex gap-4 py-5 first:pt-0 last:pb-0">
-              <span className="relative z-10 flex size-11 shrink-0 items-center justify-center rounded-full border border-(--color-accent-500)/40 bg-(--color-surface-2) text-(--color-accent-300) shadow-[0_0_0_4px_var(--color-surface-1)]">
+              <span className="relative z-10 flex size-11 shrink-0 items-center justify-center rounded-full border border-(--color-accent-500)/30 bg-(--color-surface-2) text-(--color-accent-300) shadow-[0_0_0_4px_var(--color-surface-1)]">
                 <Icon className="size-4" aria-hidden />
               </span>
               <div>
@@ -57,7 +57,6 @@ export function ResponsibilitiesTimeline({ groups }: ResponsibilitiesTimelinePro
                   {number}
                 </span>
                 <h3 className="mt-1 text-sm font-semibold text-(--color-ink-0)">{group.short}</h3>
-                <p className="mt-1 text-sm leading-relaxed text-(--color-ink-2)">{group.summary}</p>
               </div>
             </Reveal>
           );

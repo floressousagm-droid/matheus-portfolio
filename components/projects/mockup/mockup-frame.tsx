@@ -131,7 +131,7 @@ export function MockupFrame({ title, updatedAt, filters, caption, pages }: Mocku
                   className={cn(
                     "rounded-md px-3 py-1.5 text-xs font-medium transition-colors",
                     isActive
-                      ? "bg-(--color-accent-500)/15 text-(--color-accent-300)"
+                      ? "bg-(--color-accent-500)/10 text-(--color-accent-300)"
                       : "text-(--color-ink-3) hover:text-(--color-ink-1)",
                   )}
                 >

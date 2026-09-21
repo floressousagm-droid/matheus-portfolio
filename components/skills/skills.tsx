@@ -16,13 +16,13 @@ const groupIcons: Record<string, LucideIcon> = {
 
 export function Skills() {
   return (
-    <section id="habilidades" aria-label="Habilidades" className="py-24 sm:py-32">
+    <section
+      id="habilidades"
+      aria-label="Habilidades"
+      className="bg-[#070707] py-24 sm:py-32"
+    >
       <div className="mx-auto max-w-6xl px-6">
-        <SectionHeading
-          eyebrow="Habilidades"
-          title="Competências por área"
-          description="Sem barras de progresso ou percentuais — a experiência real varia por ferramenta, e é mais honesto descrever do que quantificar artificialmente."
-        />
+        <SectionHeading eyebrow="Habilidades" title="Principais Habilidades" />
 
         <div className="mt-4 grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8">
           {skillGroups.map((group, index) => {
@@ -31,7 +31,7 @@ export function Skills() {
             return (
               <Reveal key={group.id} delay={index * 0.1}>
                 <div className="flex flex-col gap-5">
-                  <div className="flex size-14 shrink-0 rotate-45 items-center justify-center rounded-md border border-(--color-accent-500)/40 bg-(--color-surface-2)">
+                  <div className="flex size-14 shrink-0 rotate-45 items-center justify-center rounded-md border border-(--color-accent-500)/30 bg-(--color-surface-2)">
                     <Icon className="size-5 -rotate-45 text-(--color-accent-300)" aria-hidden />
                   </div>
 

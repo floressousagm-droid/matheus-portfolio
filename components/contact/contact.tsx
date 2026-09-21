@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Mail } from "lucide-react";
 
 import { Github, Linkedin } from "@/components/ui/brand-icons";
@@ -8,16 +9,30 @@ import { contact, identity } from "@/data/site";
 
 export function Contact() {
   return (
-    <section id="contato" aria-label="Contato" className="py-24 sm:py-32">
-      <div className="mx-auto max-w-3xl px-6 text-center">
+    <section
+      id="contato"
+      aria-label="Contato"
+      className="relative overflow-hidden py-24 sm:py-32"
+    >
+      <Image
+        src="/images/contato/fundo.png"
+        alt=""
+        aria-hidden
+        fill
+        sizes="100vw"
+        className="object-cover opacity-30"
+      />
+      {/* Escurece mais em cima da imagem, pra manter contraste com o texto. */}
+      <div aria-hidden className="absolute inset-0 bg-(--color-surface-0)/55" />
+      <div className="relative z-10 mx-auto max-w-3xl px-6 text-center">
         <Reveal>
-          <p className="text-xs tracking-[0.2em] text-(--color-accent-300) uppercase">
-            {contact.eyebrow}
-          </p>
-          <h2 className="mt-6 text-3xl font-semibold text-(--color-ink-0) sm:text-4xl">
+          <h2 className="flex items-center justify-center gap-3 text-lg font-semibold text-(--color-accent-300) sm:text-xl">
+            <span aria-hidden className="h-5 w-0.5 shrink-0 bg-(--color-accent-500)" />
             {contact.heading}
           </h2>
-          <p className="mt-4 text-base text-(--color-ink-2)">{contact.support}</p>
+          {contact.support ? (
+            <p className="mt-4 text-base text-(--color-ink-2)">{contact.support}</p>
+          ) : null}
         </Reveal>
 
         <Reveal delay={0.1}>

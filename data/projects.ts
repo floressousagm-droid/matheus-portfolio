@@ -66,6 +66,7 @@ export const projects: Project[] = publicaveis.map((projeto) => ({
   kind: normalizarTipo(projeto.tipo),
   name: texto(projeto.nome),
   category: texto(projeto.categoria),
+  coverImage: texto(projeto.capaImagem) || undefined,
   users: (projeto.usuarios ?? []).map(texto).filter(Boolean),
   summary: texto(projeto.resumo),
   context: texto(projeto.contexto),

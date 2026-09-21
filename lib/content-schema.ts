@@ -38,6 +38,7 @@ export type ConteudoHero = {
 export type ConteudoSobre = {
   titulo?: Texto;
   olho?: Texto;
+  foto?: Texto;
   paragrafos?: Lista<Texto>;
   numeros?: Lista<{ rotulo?: Texto; valor?: Texto }>;
   trajetoria?: Lista<{ titulo?: Texto; descricao?: Texto }>;
@@ -79,6 +80,7 @@ export type ConteudoProjetos = {
     ordem?: number | null;
     tipo?: Texto;
     categoria?: Texto;
+    capaImagem?: Texto;
     usuarios?: Lista<Texto>;
     resumo?: Texto;
     avisoConfidencialidade?: boolean | null;

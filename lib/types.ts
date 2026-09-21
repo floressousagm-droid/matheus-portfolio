@@ -47,6 +47,8 @@ export type Project = {
   kind?: ProjectKind;
   name: string;
   category: string;
+  /** Imagem de capa exibida no topo do card da home. Ausente = placeholder. */
+  coverImage?: string;
   users: string[];
   summary: string;
   context: string;

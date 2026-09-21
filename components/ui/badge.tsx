@@ -11,7 +11,7 @@ const badgeVariants = cva(
         default:
           "border-(--color-surface-border) bg-(--color-surface-2) text-(--color-ink-1)",
         accent:
-          "border-(--color-accent-500)/40 bg-(--color-accent-500)/10 text-(--color-accent-300)",
+          "border-(--color-accent-500)/30 bg-(--color-accent-500)/10 text-(--color-accent-300)",
       },
     },
     defaultVariants: {

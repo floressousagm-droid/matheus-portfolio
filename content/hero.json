@@ -2,10 +2,6 @@
   "saudacao": "Olá, me chamo",
   "primeiroNome": "Matheus",
   "sobrenome": "Flores",
-  "manchete": [
-    "Entendo o problema.",
-    "Estruturo os dados.",
-    "Construo a solução."
-  ],
+  "manchete": [],
   "texto": "Analista de BI Jr. com atuação no desenvolvimento de modelos de dados, processos de ETL, análise de dados e construção de análises com Power BI. Transformo dados e necessidades de negócio em soluções analíticas objetivas, buscando simplificar processos, automatizar informações e gerar insights que apoiem decisões do dia a dia."
 }

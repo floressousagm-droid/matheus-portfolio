@@ -14,8 +14,10 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
       >
         Ir para o conteúdo principal
       </a>
-      <ProjectsTabProvider>{children}</ProjectsTabProvider>
-      <SiteFooter />
+      <ProjectsTabProvider>
+        {children}
+        <SiteFooter />
+      </ProjectsTabProvider>
     </>
   );
 }
