@@ -1,5 +1,6 @@
 {
   "titulo": "Sobre mim",
+  "foto": "/images/sobre/foto.jpg",
   "paragrafos": [
     "Sou Matheus Sousa Flores, Analista de BI Jr. na área de BI/TI da Dapco Fixadores Inoxidáveis, onde transformo dados operacionais em informação estratégica com Power BI, DAX e integração via SAP Business One.",
     "No dia a dia, construo modelos analíticos de vendas e indicadores comerciais e automatizo relatórios em Python conectando o SAP B1 ao Power BI. Gosto de unir análise de dados com solução prática de problemas, sempre buscando entregar informação clara para apoiar boas decisões."
