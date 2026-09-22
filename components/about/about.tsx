@@ -62,7 +62,7 @@ export function About() {
                 />
               </svg>
 
-              <div className="absolute inset-0 flex items-center justify-center">
+              <div className="absolute inset-0 flex -translate-y-[15%] items-center justify-center">
                 <div
                   aria-hidden
                   className="absolute size-[62%] rounded-full bg-(--color-accent-500)/20 blur-2xl"
