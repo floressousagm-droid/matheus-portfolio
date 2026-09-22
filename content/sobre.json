@@ -6,16 +6,16 @@
   ],
   "numeros": [
     {
-      "rotulo": "Experiência profissional em BI",
-      "valor": "8 meses"
+      "rotulo": "Experiência Profissional em BI",
+      "valor": "9 meses"
     },
     {
-      "rotulo": "Forma de atuação",
+      "rotulo": "Atuação",
       "valor": "Analista Júnior de BI"
     },
     {
-      "rotulo": "Formação anterior",
-      "valor": "Dev. de Software Multiplataforma"
+      "rotulo": "Formação",
+      "valor": "Fatec - Desenvolvimento de Software Multiplataforma "
     }
   ],
   "trajetoria": [
