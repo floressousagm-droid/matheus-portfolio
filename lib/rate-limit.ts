@@ -12,11 +12,21 @@ type Balde = { marcas: number[] };
 
 const baldes = new Map<string, Balde>();
 
-/** Descobre o IP de origem atrás do proxy da Vercel. */
+/**
+ * Descobre o IP de origem atrás do proxy da Vercel.
+ *
+ * `x-vercel-forwarded-for` é escrito pela borda da Vercel a partir da conexão
+ * TCP real — o cliente não consegue sobrescrevê-lo. Não usar `x-forwarded-for`
+ * como fonte confiável: é um cabeçalho que o próprio cliente pode enviar, e a
+ * Vercel *anexa* o IP real a ele em vez de substituí-lo, então o primeiro
+ * valor da lista pode continuar sendo o que o requisitante escreveu — um
+ * atacante manda um `X-Forwarded-For` diferente a cada tentativa de login e
+ * contorna o rate limit por completo, já que cada valor cria um balde novo.
+ */
 export function ipDaRequisicao(request: Request): string {
   return (
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    request.headers.get("x-real-ip") ||
+    request.headers.get("x-vercel-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip")?.trim() ||
     "desconhecido"
   );
 }

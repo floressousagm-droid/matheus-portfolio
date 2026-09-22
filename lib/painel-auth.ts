@@ -7,6 +7,15 @@
  *
  * Usa Web Crypto (e não o `crypto` do Node) porque o `proxy.ts` do Next roda no
  * runtime Edge, onde o módulo do Node não existe.
+ *
+ * Consequência de não ter estado no servidor: não existe "derrubar uma sessão
+ * específica". `/api/painel/logout` só apaga o cookie do navegador que chamou
+ * — se o valor do cookie vazou por outra via (ex.: computador compartilhado,
+ * sincronização de navegador), ele continua válido até expirar sozinho, mesmo
+ * depois de logout ou de trocar `PAINEL_SENHA_HASH`. Pra revogar todas as
+ * sessões de uma vez (inclusive uma que tenha vazado), troque `PAINEL_SEGREDO`
+ * na Vercel e faça um novo deploy — isso invalida a assinatura de qualquer
+ * cookie já emitido.
  */
 
 export const COOKIE_SESSAO = "painel-sessao";
@@ -39,7 +48,7 @@ function paraHex(buffer: ArrayBuffer): string {
  * diferença de tempo vaza informação sobre a senha. Aqui todos os caracteres
  * são sempre percorridos.
  */
-export function comparacaoSegura(a: string, b: string): boolean {
+function comparacaoSegura(a: string, b: string): boolean {
   if (a.length !== b.length) return false;
   let diferenca = 0;
   for (let i = 0; i < a.length; i += 1) {

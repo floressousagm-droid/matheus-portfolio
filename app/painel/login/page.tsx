@@ -6,6 +6,24 @@ import { Loader2, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 /**
+ * Valida que `valor` é um caminho interno de verdade, não uma forma disfarçada
+ * de sair do site.
+ *
+ * `destino.startsWith("/")` sozinho não basta: "//evil.com" e "/\evil.com"
+ * também começam com "/", mas o navegador os resolve como URL protocol-relative
+ * para outro domínio (herda o protocolo atual). Como o valor vem da query
+ * string — e portanto pode ter sido montado por quem mandou o link, não só
+ * gerado pelo `proxy.ts` — um link `/painel/login?de=//phishing.com` faria o
+ * dono do site logar de verdade (a senha vai pro domínio certo) e só depois
+ * ser redirecionado pro domínio do atacante.
+ */
+function caminhoInternoSeguro(valor: string | null): string | null {
+  if (!valor || !valor.startsWith("/")) return null;
+  if (valor.startsWith("//") || valor.startsWith("/\\")) return null;
+  return valor;
+}
+
+/**
  * Login do painel de edição.
  *
  * Fica fora do route group `(site)` de propósito: não deve herdar o rodapé nem
@@ -38,7 +56,7 @@ export default function LoginDoPainel() {
 
       // Recarrega no destino para o proxy revalidar o cookie recém-criado.
       const destino = new URLSearchParams(window.location.search).get("de");
-      window.location.href = destino?.startsWith("/") ? destino : "/keystatic";
+      window.location.href = caminhoInternoSeguro(destino) ?? "/keystatic";
     } catch {
       setErro("Falha de conexão. Tente novamente.");
       setEnviando(false);

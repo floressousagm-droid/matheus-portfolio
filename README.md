@@ -78,10 +78,10 @@ não pede GitHub nenhum.
 npm run dev
 ```
 
-Abra <http://localhost:3000/keystatic>. Sem `PAINEL_SENHA` no `.env.local`, o
-portão fica desligado e você edita direto — grava nos arquivos em `content/`.
+Abra <http://localhost:3000/keystatic>. Sem `PAINEL_SENHA_HASH` no `.env.local`,
+o portão fica desligado e você edita direto — grava nos arquivos em `content/`.
 
-Para testar o fluxo de login na sua máquina, defina `PAINEL_SENHA` e
+Para testar o fluxo de login na sua máquina, defina `PAINEL_SENHA_HASH` e
 `PAINEL_SEGREDO` no `.env.local` (veja `.env.local.example`).
 
 Depois é só commitar e enviar:
@@ -96,12 +96,25 @@ Uma vez só. **A ordem importa**: o assistente do Keystatic só roda em
 desenvolvimento, então o GitHub App é criado na sua máquina e as chaves são
 copiadas para a Vercel depois.
 
-1. **Gere a senha e o segredo:**
+1. **Gere a senha, o hash dela e o segredo:**
 
    ```bash
-   node -e "console.log('PAINEL_SENHA=' + require('crypto').randomBytes(18).toString('base64url'))"
+   # 1. Sorteie uma senha e guarde num gerenciador de senhas — ela não é
+   #    armazenada em lugar nenhum do projeto e não há como recuperá-la depois.
+   node -e "console.log(require('crypto').randomBytes(18).toString('base64url'))"
+
+   # 2. Gere o hash scrypt dela (a senha é lida pela entrada padrão, então não
+   #    fica no histórico do shell). Cole o resultado em PAINEL_SENHA_HASH.
+   node scripts/gerar-senha-hash.mjs
+
+   # 3. Gere o segredo que assina o cookie de sessão.
    node -e "console.log('PAINEL_SEGREDO=' + require('crypto').randomBytes(32).toString('hex'))"
    ```
+
+   > O que vai para o `.env.local` e para a Vercel é o **hash**, nunca a senha.
+   > Para trocar a senha depois, rode o passo 2 de novo e substitua o hash —
+   > as sessões abertas continuam valendo até expirar (trocar `PAINEL_SEGREDO`
+   > derruba todas na hora).
 
 2. **Crie o GitHub App localmente.** Ponha no `.env.local`:
 
@@ -113,7 +126,7 @@ copiadas para a Vercel depois.
    Keystatic conduz a criação e grava as chaves no seu `.env.local`.
 
 3. **Configure na Vercel** (Settings → Environment Variables) as sete variáveis:
-   `PAINEL_SENHA`, `PAINEL_SEGREDO`, `NEXT_PUBLIC_GITHUB_REPO`,
+   `PAINEL_SENHA_HASH`, `PAINEL_SEGREDO`, `NEXT_PUBLIC_GITHUB_REPO`,
    `NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`, `KEYSTATIC_GITHUB_CLIENT_ID`,
    `KEYSTATIC_GITHUB_CLIENT_SECRET`, `KEYSTATIC_SECRET`.
 
@@ -124,13 +137,21 @@ copiadas para a Vercel depois.
 4. **Faça o deploy.** Acesse `SEU-SITE.vercel.app/keystatic`, digite a senha, e
    faça o login do GitHub uma vez.
 
+### Revogando o acesso (sessão vazada, notebook compartilhado, etc.)
+
+A sessão do painel não fica registrada em nenhum lugar do servidor — o cookie
+só é assinado e expira sozinho em 7 dias. Isso significa que **trocar a senha
+não desconecta sessões já abertas**. Se precisar invalidar todo mundo
+(inclusive um cookie que tenha vazado), troque `PAINEL_SEGREDO` na Vercel e
+redeploy: qualquer cookie emitido antes disso para de validar na hora.
+
 ### O que acontece se faltar configuração
 
 Falha fechado, sempre — o painel some em vez de ficar aberto:
 
 | Situação | Resultado |
 | --- | --- |
-| Produção sem `PAINEL_SENHA`/`PAINEL_SEGREDO` | `/keystatic` e `/api/keystatic/*` → **404** |
+| Produção sem `PAINEL_SENHA_HASH`/`PAINEL_SEGREDO` | `/keystatic` e `/api/keystatic/*` → **404** |
 | Produção sem `NEXT_PUBLIC_GITHUB_REPO` | painel → **404** (evita o modo local, que grava sem autenticação) |
 | Senha errada | 401; cinco tentativas por IP a cada 15 min |
 | Cookie forjado ou expirado | 401 |
